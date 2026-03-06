@@ -3,571 +3,397 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Compatibility Test 💜</title>
+  <title>Sonali 💜</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=Satisfy&display=swap');
 
     *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
     :root{
-      --bg:#08080f; --card:#111118; --card2:#18181f; --card3:#1f1f2a;
-      --border:rgba(180,150,255,0.10); --border2:rgba(180,150,255,0.20);
-      --accent:#f0607a; --accent2:#bf7fff;
-      --text:#f4f3ff; --text2:rgba(244,243,255,0.55); --text3:rgba(244,243,255,0.28);
+      --bg:#060410;
+      --card:rgba(255,255,255,0.04);
+      --border:rgba(255,255,255,0.09);
+      --gold:#f5c87a;
+      --rose:#f07090;
+      --lilac:#c090ff;
+      --text:#f8f4ff;
+      --text2:rgba(248,244,255,0.6);
+      --text3:rgba(248,244,255,0.3);
     }
-    html,body{ height:100%; }
+
+    html,body{ height:100%; overflow:hidden; }
     body{
       min-height:100dvh; background:var(--bg);
       font-family:'DM Sans',system-ui,sans-serif;
-      display:flex; align-items:flex-start; justify-content:center;
-      overflow-y:auto; overflow-x:hidden; padding:24px 0 72px;
+      position:relative; cursor:pointer;
     }
-    body::before{
-      content:''; position:fixed; inset:0;
-      background-image:
-        linear-gradient(rgba(180,150,255,0.022) 1px,transparent 1px),
-        linear-gradient(90deg,rgba(180,150,255,0.022) 1px,transparent 1px);
-      background-size:42px 42px; pointer-events:none; z-index:0;
+
+    /* ── Deep space background ── */
+    #canvas{ position:fixed; inset:0; z-index:0; }
+
+    /* gradient overlays */
+    .grad-top{ position:fixed; top:0; left:0; right:0; height:40%; background:radial-gradient(ellipse at 60% 0%, rgba(140,60,200,0.22) 0%, transparent 70%); pointer-events:none; z-index:1; }
+    .grad-bot{ position:fixed; bottom:0; left:0; right:0; height:40%; background:radial-gradient(ellipse at 40% 100%, rgba(220,80,100,0.18) 0%, transparent 70%); pointer-events:none; z-index:1; }
+
+    /* ── Intro splash ── */
+    #intro{
+      position:fixed; inset:0; z-index:50;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      text-align:center;
+      transition:opacity 0.8s ease, transform 0.8s ease;
     }
-    .blob{ position:fixed; border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; }
-    .b1{ width:340px;height:340px;background:#bf7fff;opacity:0.11;top:-110px;right:-110px; }
-    .b2{ width:300px;height:300px;background:#f0607a;opacity:0.09;bottom:-80px;left:-110px; }
+    #intro.hide{ opacity:0; transform:scale(1.08); pointer-events:none; }
 
-    #wrap{ position:relative; z-index:10; width:92%; max-width:400px; }
+    .intro-heart{
+      font-size:5rem; display:block; margin-bottom:20px;
+      animation:heartPulse 0.8s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes heartPulse{ from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
 
-    /* ── Header ── */
-    .test-header{ text-align:center; margin-bottom:24px; animation:fadeUp 0.5s ease both; }
-    .test-tag{
+    .intro-text{
+      font-family:'DM Serif Display',Georgia,serif;
+      font-size:2.2rem; color:var(--text); line-height:1.2;
+      animation:fadeUp 0.7s 0.3s ease both;
+    }
+    .intro-text em{ font-style:italic; color:var(--rose); }
+    .intro-sub{
+      font-size:0.88rem; color:var(--text2); margin-top:10px;
+      animation:fadeUp 0.7s 0.6s ease both;
+    }
+    @keyframes fadeUp{ from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    /* ── Main content ── */
+    #main{
+      position:relative; z-index:10;
+      height:100dvh;
+      overflow-y:auto;
+      display:flex; flex-direction:column; align-items:center;
+      justify-content:flex-start;
+      padding:32px 20px 60px;
+      opacity:0; transition:opacity 0.8s ease;
+    }
+    #main.show{ opacity:1; }
+
+    /* date pill */
+    .date-pill{
       display:inline-flex; align-items:center; gap:6px;
-      background:rgba(191,127,255,0.1); border:1px solid rgba(191,127,255,0.22);
-      border-radius:30px; padding:5px 14px;
-      color:var(--accent2); font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;
-      margin-bottom:14px;
+      background:rgba(245,200,122,0.1); border:1px solid rgba(245,200,122,0.2);
+      border-radius:30px; padding:5px 16px;
+      font-size:0.7rem; color:var(--gold); letter-spacing:2px;
+      text-transform:uppercase; margin-bottom:28px;
+      animation:fadeUp 0.6s 0.2s ease both;
     }
-    .tdot{ width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 1.2s infinite; }
-    @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0.15} }
-    .test-title{ font-family:'DM Serif Display',Georgia,serif; font-size:1.8rem; color:var(--text); margin-bottom:6px; line-height:1.2; }
-    .test-title em{ font-style:italic; color:var(--accent); }
-    .test-sub{ font-size:0.84rem; color:var(--text2); line-height:1.5; }
+    .dpill-dot{ width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite; }
+    @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-    /* ── Progress bar ── */
-    .prog-wrap{ margin-bottom:20px; animation:fadeUp 0.5s 0.1s ease both; }
-    .prog-labels{ display:flex; justify-content:space-between; margin-bottom:7px; }
-    .prog-label{ font-size:0.68rem; color:var(--text3); letter-spacing:1px; text-transform:uppercase; }
-    #progPct{ color:var(--accent2); font-weight:600; }
-    .prog-track{ height:4px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
-    #progBar{ height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width 0.5s cubic-bezier(0.34,1.2,0.64,1); }
+    /* names */
+    .names-row{
+      display:flex; align-items:center; gap:14px; margin-bottom:6px;
+      animation:fadeUp 0.6s 0.3s ease both;
+    }
+    .name-tag{
+      background:rgba(255,255,255,0.06); border:1px solid var(--border);
+      border-radius:10px; padding:8px 16px;
+      font-size:0.82rem; color:var(--text2); letter-spacing:1px;
+    }
+    .name-heart{ font-size:1.6rem; animation:heartbeat 2s ease-in-out infinite; }
+    @keyframes heartbeat{ 0%,100%{transform:scale(1)} 30%{transform:scale(1.18)} 60%{transform:scale(1.07)} }
 
-    /* ── Question card ── */
-    #qCard{
-      background:var(--card); border:1px solid var(--border2);
-      border-radius:22px; padding:26px 22px 22px;
-      margin-bottom:12px;
-      animation:fadeUp 0.45s ease both;
-    }
-    @keyframes fadeUp{ from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-    .q-num{ font-size:0.68rem; color:var(--text3); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
-    .q-text{ font-family:'DM Serif Display',Georgia,serif; font-size:1.25rem; color:var(--text); line-height:1.4; margin-bottom:20px; }
-    .q-note{ font-size:0.78rem; color:var(--text2); font-style:italic; margin-bottom:20px; margin-top:-12px; }
+    .names-note{ font-size:0.7rem; color:var(--text3); text-align:center; margin-bottom:32px; letter-spacing:1px; animation:fadeUp 0.6s 0.4s ease both; }
 
-    /* Options */
-    .options{ display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
-    .opt{
-      background:var(--card2); border:1px solid var(--border);
-      border-radius:13px; padding:13px 16px;
-      display:flex; align-items:center; gap:12px;
-      cursor:pointer; transition:all 0.2s ease;
-      -webkit-user-select:none; user-select:none;
+    /* ── Main card ── */
+    .letter-card{
+      width:100%; max-width:400px;
+      background:rgba(255,255,255,0.038);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:28px;
+      padding:32px 26px;
+      backdrop-filter:blur(20px);
+      box-shadow: 0 0 80px rgba(180,100,255,0.08), 0 0 0 1px rgba(245,200,122,0.06) inset;
+      animation:fadeUp 0.7s 0.5s ease both;
+      margin-bottom:20px;
     }
-    .opt:active{ transform:scale(0.98); }
-    .opt.selected{
-      background:rgba(191,127,255,0.12);
-      border-color:rgba(191,127,255,0.45);
-      box-shadow:0 0 16px rgba(191,127,255,0.12);
-    }
-    .opt-radio{
-      width:20px; height:20px; border-radius:50%; flex-shrink:0;
-      border:1.5px solid var(--border2);
-      display:flex; align-items:center; justify-content:center;
-      transition:all 0.2s;
-    }
-    .opt.selected .opt-radio{
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      border-color:transparent;
-    }
-    .opt-radio::after{
-      content:''; width:7px; height:7px; border-radius:50%;
-      background:#fff; opacity:0; transition:opacity 0.2s;
-    }
-    .opt.selected .opt-radio::after{ opacity:1; }
-    .opt-text{ font-size:0.88rem; color:var(--text2); line-height:1.4; flex:1; }
-    .opt.selected .opt-text{ color:var(--text); }
-    .opt-emoji{ font-size:1.1rem; flex-shrink:0; }
 
-    /* Next button */
-    #nextBtn{
-      width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#fff; border:none; border-radius:13px;
-      padding:16px; font-size:0.98rem; font-weight:700;
-      cursor:pointer; font-family:'DM Sans',sans-serif;
-      opacity:0.35; pointer-events:none;
-      transition:opacity 0.25s, transform 0.12s;
-      box-shadow:0 4px 20px rgba(191,127,255,0.0);
+    .card-top{ display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+    .card-av{
+      width:44px;height:44px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--rose),var(--lilac));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.1rem;font-weight:700;color:#fff;
+      box-shadow:0 0 0 2px rgba(192,144,255,0.22), 0 0 20px rgba(192,144,255,0.18);
     }
-    #nextBtn.active{
-      opacity:1; pointer-events:all;
-      box-shadow:0 4px 20px rgba(191,127,255,0.28);
-    }
-    #nextBtn:active{ transform:scale(0.97); }
+    .card-from{ flex:1; }
+    .card-from-name{ font-size:0.9rem;font-weight:600;color:var(--text); }
+    .card-from-sub{ font-size:0.68rem;color:var(--text3);margin-top:1px; }
+    .card-date-sm{ font-size:0.65rem;color:var(--text3); }
 
-    /* ── Loading screen ── */
-    #loadScreen{
-      display:none; background:var(--card); border:1px solid var(--border2);
-      border-radius:22px; padding:36px 24px;
-      text-align:center; animation:fadeUp 0.5s ease both;
-    }
-    #loadScreen.show{ display:block; }
-    .load-emoji{ font-size:3.5rem; display:block; margin-bottom:16px; animation:spin 2s linear infinite; }
-    @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-    .load-title{ font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--text); margin-bottom:6px; }
-    .load-sub{ font-size:0.82rem; color:var(--text2); margin-bottom:24px; }
-    .load-steps{ text-align:left; display:flex; flex-direction:column; gap:10px; }
-    .load-step{
-      display:flex; align-items:center; gap:10px;
-      font-size:0.78rem; color:var(--text3); opacity:0;
-      transition:opacity 0.4s, color 0.4s;
-    }
-    .load-step.done{ opacity:1; color:rgba(244,243,255,0.6); }
-    .load-step.active{ opacity:1; color:var(--accent2); }
-    .load-step-icon{ font-size:0.9rem; flex-shrink:0; width:20px; text-align:center; }
-    .step-spinner{
-      width:14px; height:14px; border-radius:50%;
-      border:2px solid rgba(191,127,255,0.2);
-      border-top-color:var(--accent2);
-      animation:spin 0.8s linear infinite; flex-shrink:0;
-    }
-    .step-check{ color:rgba(90,210,110,0.9); font-size:0.85rem; flex-shrink:0; }
+    .card-divider{ height:1px;background:var(--border);margin-bottom:22px; }
 
-    /* ── Result screen ── */
-    #resultScreen{ display:none; animation:fadeUp 0.5s ease both; }
-    #resultScreen.show{ display:block; }
+    .letter-greeting{
+      font-family:'Satisfy',cursive;
+      font-size:1.7rem; color:var(--rose);
+      margin-bottom:18px; display:block;
+    }
 
-    .result-hero{
-      background:var(--card); border:1px solid var(--border2);
-      border-radius:22px; padding:30px 24px 26px;
-      text-align:center; margin-bottom:12px;
-      box-shadow:0 0 60px rgba(191,127,255,0.1);
+    .letter-body{ font-size:0.9rem; color:var(--text2); line-height:1.85; }
+    .letter-body p{ margin-bottom:14px; }
+    .letter-body p:last-child{ margin-bottom:0; }
+    .letter-body strong{ color:var(--text); font-weight:600; }
+    .letter-body em{ color:var(--gold); font-style:italic; }
+    .letter-body .highlight{
+      background:rgba(240,112,144,0.1); border:1px solid rgba(240,112,144,0.2);
+      border-radius:8px; padding:12px 14px; display:block; margin:14px 0;
+      font-size:0.88rem; line-height:1.6;
     }
-    .result-tag{
-      display:inline-flex; align-items:center; gap:6px;
-      background:rgba(90,210,110,0.1); border:1px solid rgba(90,210,110,0.22);
-      border-radius:30px; padding:5px 14px;
-      color:rgba(90,210,110,0.9); font-size:0.68rem;
-      letter-spacing:2px; text-transform:uppercase; margin-bottom:18px;
-    }
-    .rtag-dot{ width:5px;height:5px;border-radius:50%;background:rgba(90,210,110,0.9);animation:blink 1.2s infinite; }
-    .pct-display{
-      font-family:'DM Serif Display',serif;
-      font-size:5rem; font-weight:900; line-height:1;
-      background:linear-gradient(135deg,var(--accent),var(--accent2));
-      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-      margin-bottom:4px; animation:countUp 1.5s ease both;
-    }
-    @keyframes countUp{ from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
-    .pct-label{ font-size:0.82rem; color:var(--text2); margin-bottom:6px; }
-    .pct-verdict{
-      font-family:'DM Serif Display',serif;
-      font-size:1.5rem; color:var(--text); margin-bottom:4px;
-    }
-    .pct-note{ font-size:0.8rem; color:var(--text2); font-style:italic; margin-bottom:20px; }
 
-    /* breakdown bars */
-    .breakdown{ display:flex; flex-direction:column; gap:12px; text-align:left; margin-top:8px; }
-    .bk-row{}
-    .bk-top{ display:flex; justify-content:space-between; margin-bottom:5px; }
-    .bk-label{ font-size:0.74rem; color:var(--text2); }
-    .bk-val{ font-size:0.74rem; color:var(--accent2); font-weight:600; }
-    .bk-track{ height:5px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
-    .bk-fill{ height:100%; border-radius:4px; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%; transition:width 1.2s cubic-bezier(0.34,1.0,0.64,1); }
-
-    /* disclaimer */
-    .disclaimer{
-      background:rgba(240,96,122,0.06); border:1px solid rgba(240,96,122,0.15);
-      border-radius:12px; padding:12px 14px; margin-top:16px;
-      font-size:0.74rem; color:var(--text2); line-height:1.5; text-align:left;
+    .letter-sign{
+      font-family:'Satisfy',cursive;
+      font-size:1.4rem; color:var(--lilac);
+      display:block; margin-top:22px; text-align:right;
     }
-    .disclaimer strong{ color:var(--accent); }
 
-    /* CTA */
-    .cta-card{
-      background:var(--card); border:1px solid var(--border2);
-      border-radius:22px; padding:24px 22px;
+    /* ── Stats row ── */
+    .stats-row{
+      width:100%; max-width:400px;
+      display:grid; grid-template-columns:1fr 1fr 1fr;
+      gap:10px; margin-bottom:20px;
+      animation:fadeUp 0.6s 0.7s ease both;
     }
-    .cta-label{ font-size:0.68rem; color:var(--text3); letter-spacing:1.8px; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
-    .cta-label::before,.cta-label::after{ content:''; flex:1; height:1px; background:var(--border); }
-    .cta-q{ font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--text); margin-bottom:16px; text-align:center; line-height:1.4; }
-
-    .btn-yes{
-      width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#fff; border:none; border-radius:13px;
-      padding:17px; font-size:1.0rem; font-weight:700;
-      cursor:pointer; font-family:'DM Sans',sans-serif;
-      box-shadow:0 4px 22px rgba(191,127,255,0.28);
-      margin-bottom:10px; transition:opacity 0.15s, transform 0.12s;
-    }
-    .btn-yes:active{ opacity:0.85; transform:scale(0.97); }
-    #noBtn{
-      display:block; width:100%; background:transparent; border:none;
-      color:rgba(244,243,255,0.18); font-size:0.72rem;
-      padding:8px; cursor:pointer; font-family:'DM Sans',sans-serif;
+    .stat{
+      background:rgba(255,255,255,0.04);
+      border:1px solid var(--border);
+      border-radius:16px; padding:14px 10px;
       text-align:center;
     }
+    .stat-icon{ font-size:1.4rem; display:block; margin-bottom:5px; }
+    .stat-val{ font-size:0.78rem;font-weight:700;color:var(--text);display:block;margin-bottom:2px; }
+    .stat-label{ font-size:0.62rem;color:var(--text3);letter-spacing:0.5px; }
 
-    /* popup */
-    #popup{ position:fixed;inset:0;z-index:800;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;opacity:0;transition:opacity 0.3s; }
-    #popup.show{ pointer-events:all;opacity:1; }
-    .pop-back{ position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px); }
-    .pop-sheet{
-      position:relative;z-index:1;width:100%;max-width:400px;
-      background:var(--card); border:1px solid var(--border2);
-      border-radius:24px 24px 0 0;
-      padding:26px 24px 40px; text-align:center;
-      transform:translateY(100%);
-      transition:transform 0.38s cubic-bezier(0.34,1.2,0.64,1);
+    /* ── Promise card ── */
+    .promise-card{
+      width:100%; max-width:400px;
+      background:linear-gradient(135deg,rgba(240,112,144,0.08),rgba(192,144,255,0.08));
+      border:1px solid rgba(192,144,255,0.2);
+      border-radius:22px; padding:24px 22px;
+      text-align:center;
+      animation:fadeUp 0.6s 0.9s ease both;
+      margin-bottom:18px;
     }
-    #popup.show .pop-sheet{ transform:translateY(0); }
-    .pop-handle{ width:36px;height:3px;border-radius:2px;background:var(--border2);margin:0 auto 20px; }
-    .pop-icon{ font-size:2.5rem;margin-bottom:12px;display:block; }
-    .pop-head{ font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text);margin-bottom:8px;line-height:1.3; }
-    .pop-body{ font-size:0.84rem;color:var(--text2);line-height:1.65;margin-bottom:22px; }
-    .pop-close{ width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:13px;padding:14px;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px; }
-    .pop-dismiss{ background:transparent;border:none;font-size:0.74rem;color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif; }
+    .promise-title{
+      font-family:'DM Serif Display',serif;
+      font-size:1.3rem; color:var(--text); margin-bottom:12px;
+    }
+    .promise-title em{ font-style:italic; color:var(--rose); }
+    .promises{ display:flex;flex-direction:column;gap:9px;text-align:left; }
+    .pr-row{ display:flex;align-items:flex-start;gap:9px;font-size:0.82rem;color:var(--text2);line-height:1.4; }
+    .pr-icon{ flex-shrink:0;font-size:0.9rem;margin-top:1px; }
 
-    /* yes screen */
-    #yesScreen{ display:none;position:fixed;inset:0;z-index:999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:28px; }
-    #yesScreen.show{ display:flex;animation:fadeUp 0.45s ease; }
-    .yes-card{ background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:36px 26px 30px;width:100%;max-width:400px;text-align:center;animation:popIn 0.55s cubic-bezier(0.34,1.3,0.64,1) both; }
-    @keyframes popIn{ from{opacity:0;transform:scale(0.82)} to{opacity:1;transform:scale(1)} }
-    .yes-tag{ font-size:0.68rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;opacity:0.8; }
-    .yes-emoji{ font-size:4rem;display:block;margin-bottom:12px;animation:spinPop 0.7s cubic-bezier(0.34,1.56,0.64,1); }
-    @keyframes spinPop{ from{transform:scale(0.1) rotate(-20deg)} to{transform:scale(1) rotate(0)} }
-    .yes-title{ font-family:'DM Serif Display',serif;font-size:1.9rem;color:var(--text);margin-bottom:8px; }
-    .yes-div{ height:1px;background:var(--border);margin:14px 0; }
-    .yes-msg{ font-size:0.88rem;color:var(--text2);line-height:1.85; }
-    .yes-msg strong{ color:var(--text);font-weight:600; }
+    /* ── Tap hint ── */
+    .tap-hint{
+      font-size:0.72rem; color:var(--text3); text-align:center;
+      animation:pulse 2s ease-in-out infinite;
+      animation-delay:2s;
+    }
+    @keyframes pulse{ 0%,100%{opacity:0.3} 50%{opacity:0.7} }
 
+    /* ── Floating particles from tap ── */
+    .spark{ position:fixed; pointer-events:none; z-index:99; font-size:1.4rem; animation:sparkFly ease-out forwards; }
+    @keyframes sparkFly{
+      0%  { transform:translate(0,0) scale(1) rotate(0deg); opacity:1; }
+      100%{ transform:translate(var(--dx),var(--dy)) scale(0.3) rotate(var(--dr)); opacity:0; }
+    }
+
+    /* confetti */
     .conf{ position:fixed;top:-20px;pointer-events:none;z-index:9999;animation:fall linear forwards; }
     @keyframes fall{ 0%{transform:translateY(0) rotate(0);opacity:1} 100%{transform:translateY(115vh) rotate(420deg);opacity:0} }
   </style>
 </head>
 <body>
-<div class="blob b1"></div>
-<div class="blob b2"></div>
+<div class="grad-top"></div>
+<div class="grad-bot"></div>
+<canvas id="canvas"></canvas>
 
-<div id="wrap">
+<!-- INTRO SPLASH -->
+<div id="intro">
+  <span class="intro-heart">💜</span>
+  <div class="intro-text">She said<br/><em>Love You.</em></div>
+  <div class="intro-sub">Yeh pal hamesha ke liye hai. 🌙</div>
+</div>
 
-  <!-- Header -->
-  <div class="test-header">
-    <div class="test-tag"><span class="tdot"></span> Certified Test v2.6</div>
-    <h1 class="test-title">Dil <em>Compatibility</em><br/>Calculator</h1>
-    <p class="test-sub">5 sawal — 2 minute — aur sach pata chal jaayega 👀</p>
+<!-- MAIN -->
+<div id="main">
+
+  <div class="date-pill"><span class="dpill-dot"></span> 6 March 2026 · The Day ✨</div>
+
+  <div class="names-row">
+    <div class="name-tag">Pune 🧡</div>
+    <span class="name-heart">💜</span>
+    <div class="name-tag">Daman 🌊</div>
   </div>
+  <div class="names-note">Marathi ladka × Half-Kokani Half-Guju ladki</div>
 
-  <!-- Progress -->
-  <div class="prog-wrap">
-    <div class="prog-labels">
-      <span class="prog-label">Sawaal <span id="qNum">1</span> / 5</span>
-      <span class="prog-label" id="progPct">0%</span>
-    </div>
-    <div class="prog-track"><div id="progBar"></div></div>
-  </div>
-
-  <!-- Question card -->
-  <div id="qCard">
-    <div class="q-num" id="qLabel">Sawaal 01</div>
-    <div class="q-text" id="qText"></div>
-    <div class="q-note" id="qNote" style="display:none"></div>
-    <div class="options" id="optList"></div>
-    <button id="nextBtn" onclick="nextQ()">Aage Badhein →</button>
-  </div>
-
-  <!-- Loading screen -->
-  <div id="loadScreen">
-    <span class="load-emoji">🔬</span>
-    <div class="load-title">Calculating...</div>
-    <div class="load-sub">Tumhare jawaabon ka analysis ho raha hai</div>
-    <div class="load-steps" id="loadSteps"></div>
-  </div>
-
-  <!-- Result screen -->
-  <div id="resultScreen">
-    <div class="result-hero">
-      <div class="result-tag"><span class="rtag-dot"></span> Analysis Complete</div>
-      <div class="pct-display" id="pctDisplay">0%</div>
-      <div class="pct-label">Compatibility Score</div>
-      <div class="pct-verdict">Ekdum Perfect Match! 💜</div>
-      <div class="pct-note">"Yeh numbers kabhi jhooth nahi bolte." — Algorithm</div>
-      <div class="breakdown" id="breakdown"></div>
-      <div class="disclaimer">
-        <strong>Note:</strong> Is test ke 5,847 attempts mein se 5,847 baar yahi result aaya hai. Isliye yeh clearly <strong>tumhare jawaabon pe depend karta hai</strong> — aur tumhare jawaab ne sach bata diya. 😏
+  <!-- Letter -->
+  <div class="letter-card">
+    <div class="card-top">
+      <div class="card-av">S</div>
+      <div class="card-from">
+        <div class="card-from-name">Sirf Shona ke liye 💜</div>
+        <div class="card-from-sub">Dil se likha hua</div>
       </div>
+      <div class="card-date-sm">6 Mar '26</div>
+    </div>
+    <div class="card-divider"></div>
+
+    <span class="letter-greeting">Meri Sonali,</span>
+
+    <div class="letter-body">
+      <p>Aaj jab tumne woh do shabd bole —<br/><strong>"Love you."</strong></p>
+
+      <p>Kuch seconds ke liye mujhe believe hi nahi hua. Dil ne ek second ke liye kaam karna band kar diya. Phir... <em>full ho gaya.</em> Bilkul full.</p>
+
+      <span class="highlight">
+        💌 Yeh woh pal hai jo main zindagi bhar yaad rakhunga. <strong>6 March 2026.</strong> Jab Daman ki ek half-Kokani half-Guju ladki ne ek Pune ke Marathi ladke ka poora din, poora saal, poori zindagi bana diya.
+      </span>
+
+      <p>Tumhe pata hai main kab se wait kar raha tha? Jab se hum baat karte the, jab se tumhari hasi sunte sunte phone pakde rehta tha... main jaanta tha. Lekin sunna alag hota hai.</p>
+
+      <p>Aaj maine suna. Aur yeh sab kuch worth it tha — <em>har ek late night call, har ek message, Pune se Daman ki har ek doori.</em></p>
+
+      <p><strong>Tum meri ho, Sonali. Officially. Forever. 🔒</strong></p>
     </div>
 
-    <div class="cta-card">
-      <div class="cta-label">Ab Seedha Sawaal</div>
-      <div class="cta-q">Score 98.7% hai, Shona.<br/>Toh ab officially haan bolti ho? 🥺</div>
-      <button class="btn-yes" onclick="onYes()">Haan bolti hoon 💕</button>
-      <button id="noBtn" onclick="onNo()">algorithm galat hai</button>
+    <span class="letter-sign">Tumhara 💜</span>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat">
+      <span class="stat-icon">📞</span>
+      <span class="stat-val">1h 23m</span>
+      <span class="stat-label">Avg Call</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">💬</span>
+      <span class="stat-val">3,241</span>
+      <span class="stat-label">Messages</span>
+    </div>
+    <div class="stat">
+      <span class="stat-icon">💜</span>
+      <span class="stat-val">∞</span>
+      <span class="stat-label">Worth It</span>
     </div>
   </div>
 
-</div>
-
-<!-- Popup -->
-<div id="popup">
-  <div class="pop-back" onclick="closePopup()"></div>
-  <div class="pop-sheet">
-    <div class="pop-handle"></div>
-    <span class="pop-icon" id="popIcon"></span>
-    <div class="pop-head" id="popHead"></div>
-    <div class="pop-body" id="popBody"></div>
-    <button class="pop-close" id="popClose" onclick="closePopup()"></button>
-    <button class="pop-dismiss" onclick="closePopup()">Band karo</button>
+  <!-- Promises -->
+  <div class="promise-card">
+    <div class="promise-title">Meri <em>Promises</em> Tumse 🌙</div>
+    <div class="promises">
+      <div class="pr-row"><span class="pr-icon">🌅</span><span>Subah ka pehla "good morning" hamesha tumhara.</span></div>
+      <div class="pr-row"><span class="pr-icon">📞</span><span>Late night calls — jab bhi zaroorat ho, main hoon.</span></div>
+      <div class="pr-row"><span class="pr-icon">🌊</span><span>Pune se Daman — doori kabhi roke nahi mujhe.</span></div>
+      <div class="pr-row"><span class="pr-icon">🤝</span><span>Har buri din mein tumhare saath khada rahunga.</span></div>
+      <div class="pr-row"><span class="pr-icon">💜</span><span>Jo tumne aaj bola — main wahi feel karta hoon. Always.</span></div>
+    </div>
   </div>
-</div>
 
-<!-- YES Screen -->
-<div id="yesScreen">
-  <div class="yes-card">
-    <div class="yes-tag">result confirmed ❤️</div>
-    <span class="yes-emoji">🥰</span>
-    <h2 class="yes-title">98.7% + Haan = ∞</h2>
-    <div class="yes-div"></div>
-    <p class="yes-msg">
-      Algorithm ne pehle hi bata diya tha. 💜<br><br>
-      <strong>Sonali + Pune wala ladka = Certified Compatible. 🔒</strong><br><br>
-      Ab yeh officially sealed hai. Koi undo button nahi. 🌙
-    </p>
-  </div>
+  <div class="tap-hint">✨ Tap karo — celebrate karo ✨</div>
+
 </div>
 
 <script>
-  const questions = [
-    {
-      text: "Jab uska naam phone screen pe aata hai, tumhara pehla reaction kya hota hai?",
-      note: "(Sach bolna — algorithm sab detect kar leta hai 👀)",
-      opts: [
-        { e:"😊", t:"Thodi si smile aati hai, bas." },
-        { e:"💓", t:"Dil thoda fast ho jaata hai — involuntarily." },
-        { e:"🙄", t:"Ignore karte hain. Bilkul." },
-        { e:"😶", t:"Kuch nahi hota. Pakka." },
-      ]
-    },
-    {
-      text: "Raat ko neend nahi aati toh dimag mein kaun aata hai?",
-      note: null,
-      opts: [
-        { e:"🌙", t:"Koi nahi. Seedha so jaate hain." },
-        { e:"💭", t:"Uski koi baat yaad aa jaati hai." },
-        { e:"😴", t:"Random thoughts — definitely uske baare mein nahi." },
-        { e:"🥺", t:"...okay, thoda toh aata hai. Happy?" },
-      ]
-    },
-    {
-      text: "Agar woh aaj keh de 'tum mujhe bahut acchi lagti ho' — toh?",
-      note: "(Yeh real scenario hai, jawab dhyan se dena 😏)",
-      opts: [
-        { e:"😐", t:"Normal rehte hain. Koi farak nahi padta." },
-        { e:"🫣", t:"Honestly... dil mein kuch hoga zaroor." },
-        { e:"😅", t:"Awkward ho jaayega lekin secretly khushi hogi." },
-        { e:"💜", t:"...main yeh nahi bataunga/bataungi." },
-      ]
-    },
-    {
-      text: "Uski ek cheez jo tumhe genuinely acchi lagti hai?",
-      note: null,
-      opts: [
-        { e:"🤷", t:"Kuch khaas nahi honestly." },
-        { e:"😂", t:"The way he makes me laugh — ugh." },
-        { e:"🫀", t:"The way he cares. It's annoying how sweet he is." },
-        { e:"🌟", t:"Honestly... sab kuch. Ugh." },
-      ]
-    },
-    {
-      text: "Last sawaal — dono ke beech actually kya chal raha hai?",
-      note: "(Algorithm is sawaal ka jawab pehle se jaanta hai 🔬)",
-      opts: [
-        { e:"🤝", t:"Sirf dost hain. Bas." },
-        { e:"🌀", t:"Kuch toh hai... exactly pata nahi." },
-        { e:"💜", t:"Feelings hain lekin... complicated." },
-        { e:"🙈", t:"Main kuch nahi maan rahi." },
-      ]
-    },
-  ];
+  // ── Star canvas ──
+  const canvas = document.getElementById('canvas');
+  const ctx    = canvas.getContext('2d');
+  let stars = [];
 
-  const breakdownData = [
-    { label:"Dil ka connection", val:"99.2%", pct:99.2 },
-    { label:"Late night call compatibility", val:"100%", pct:100 },
-    { label:"Smile trigger frequency", val:"98.1%", pct:98.1 },
-    { label:"'Sirf dost' believability", val:"2.3%", pct:2.3 },
-    { label:"Overall compatibility", val:"98.7%", pct:98.7 },
-  ];
+  function resize(){
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-  const loadStepsData = [
-    "Jawaabon ka analysis ho raha hai...",
-    "Heart rate patterns check ho rahe hain...",
-    "Smile trigger data compile ho raha hai...",
-    "Dil metrics calculate ho rahe hain...",
-    "Final compatibility score generate ho raha hai...",
-  ];
+  function initStars(){
+    stars = [];
+    for(let i=0;i<180;i++){
+      stars.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        r: 0.3 + Math.random()*1.6,
+        a: Math.random(),
+        speed: 0.003 + Math.random()*0.008,
+        phase: Math.random()*Math.PI*2,
+      });
+    }
+  }
+  initStars();
 
-  let current = 0, selected = null, noCnt = 0;
-
-  function render(){
-    const q = questions[current];
-    document.getElementById('qLabel').textContent = `Sawaal ${String(current+1).padStart(2,'0')}`;
-    document.getElementById('qText').textContent  = q.text;
-    const noteEl = document.getElementById('qNote');
-    if(q.note){ noteEl.textContent=q.note; noteEl.style.display='block'; }
-    else { noteEl.style.display='none'; }
-
-    document.getElementById('qNum').textContent  = current+1;
-    document.getElementById('progPct').textContent = Math.round((current/5)*100)+'%';
-    document.getElementById('progBar').style.width = (current/5*100)+'%';
-
-    const list = document.getElementById('optList');
-    list.innerHTML = '';
-    q.opts.forEach((o,i)=>{
-      const d=document.createElement('div');
-      d.className='opt';
-      d.innerHTML=`<div class="opt-radio"></div><div class="opt-text">${o.t}</div><div class="opt-emoji">${o.e}</div>`;
-      d.addEventListener('click',()=>selectOpt(i));
-      list.appendChild(d);
+  function drawStars(t){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    stars.forEach(s=>{
+      const alpha = s.a * (0.4 + 0.6*Math.sin(t*s.speed + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(248,244,255,${alpha})`;
+      ctx.fill();
     });
+    requestAnimationFrame(drawStars);
+  }
+  drawStars(0);
 
-    selected=null;
-    const nb=document.getElementById('nextBtn');
-    nb.classList.remove('active');
-    nb.textContent = current===4 ? 'Result Dekho 🔬' : 'Aage Badhein →';
+  // ── Intro → Main transition ──
+  setTimeout(()=>{
+    launchBurst();
+    document.getElementById('intro').classList.add('hide');
+    setTimeout(()=>{
+      document.getElementById('intro').style.display='none';
+      document.getElementById('main').classList.add('show');
+    },800);
+  },2200);
 
-    // Animate card in
-    const card=document.getElementById('qCard');
-    card.style.animation='none'; void card.offsetWidth;
-    card.style.animation='fadeUp 0.4s ease both';
+  // ── Tap anywhere = sparks ──
+  document.addEventListener('click', spawnSparks);
+  document.addEventListener('touchstart', e=>{
+    const t = e.touches[0];
+    spawnSparks({ clientX:t.clientX, clientY:t.clientY });
+  }, { passive:true });
+
+  const sparkEmojis = ['💜','✨','💕','🌟','💗','🩷','⭐','🌸','💫','🎊'];
+
+  function spawnSparks(e){
+    const x = e.clientX, y = e.clientY;
+    const count = 6 + Math.floor(Math.random()*5);
+    for(let i=0;i<count;i++){
+      const el = document.createElement('div');
+      el.className='spark';
+      el.textContent = sparkEmojis[Math.floor(Math.random()*sparkEmojis.length)];
+      const angle = (Math.random()*360) * Math.PI/180;
+      const dist  = 60 + Math.random()*100;
+      el.style.setProperty('--dx', Math.cos(angle)*dist + 'px');
+      el.style.setProperty('--dy', Math.sin(angle)*dist - 40 + 'px');
+      el.style.setProperty('--dr', (Math.random()*360-180) + 'deg');
+      el.style.left = x+'px';
+      el.style.top  = y+'px';
+      el.style.fontSize = (0.8+Math.random()*1.2)+'rem';
+      el.style.animationDuration = (0.7+Math.random()*0.8)+'s';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 1200);
+    }
   }
 
-  function selectOpt(idx){
-    selected=idx;
-    document.querySelectorAll('.opt').forEach((el,i)=>{
-      el.classList.toggle('selected',i===idx);
-    });
-    document.getElementById('nextBtn').classList.add('active');
-  }
-
-  function nextQ(){
-    if(selected===null) return;
-    if(current<4){ current++; render(); }
-    else{ startLoad(); }
-  }
-
-  function startLoad(){
-    document.getElementById('qCard').style.display='none';
-    document.getElementById('progBar').style.width='100%';
-    document.getElementById('progPct').textContent='100%';
-    document.getElementById('qNum').textContent='5';
-
-    const ls=document.getElementById('loadScreen');
-    ls.classList.add('show');
-
-    const stepsEl=document.getElementById('loadSteps');
-    stepsEl.innerHTML='';
-    loadStepsData.forEach(s=>{
-      const d=document.createElement('div');
-      d.className='load-step';
-      d.innerHTML=`<span class="step-spinner"></span><span>${s}</span>`;
-      stepsEl.appendChild(d);
-    });
-
-    const steps=stepsEl.querySelectorAll('.load-step');
-    steps[0].classList.add('active');
-
-    let i=0;
-    const iv=setInterval(()=>{
-      steps[i].classList.remove('active');
-      steps[i].classList.add('done');
-      steps[i].querySelector('.step-spinner').outerHTML='<span class="step-check">✓</span>';
-      i++;
-      if(i<steps.length) steps[i].classList.add('active');
-      else{ clearInterval(iv); setTimeout(showResult,800); }
-    },700);
-  }
-
-  function showResult(){
-    document.getElementById('loadScreen').classList.remove('show');
-    document.getElementById('loadScreen').style.display='none';
-    const rs=document.getElementById('resultScreen');
-    rs.classList.add('show');
-
-    // Animate percentage count up
-    let n=0; const target=98.7;
-    const iv=setInterval(()=>{
-      n=Math.min(n+1.8,target);
-      document.getElementById('pctDisplay').textContent=n.toFixed(1)+'%';
-      if(n>=target) clearInterval(iv);
-    },28);
-
-    // Build breakdown
-    const bd=document.getElementById('breakdown');
-    bd.innerHTML='';
-    breakdownData.forEach((b,i)=>{
-      const d=document.createElement('div');
-      d.className='bk-row';
-      d.innerHTML=`<div class="bk-top"><span class="bk-label">${b.label}</span><span class="bk-val">${b.val}</span></div><div class="bk-track"><div class="bk-fill" id="bf${i}"></div></div>`;
-      bd.appendChild(d);
-      setTimeout(()=>{ document.getElementById('bf'+i).style.width=b.pct+'%'; },300+i*180);
-    });
-
-    setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),400);
-  }
-
-  render();
-
-  // No button popups
-  const noPops=[
-    { icon:'🔬', head:'Algorithm Error? Nahi.', body:'Tumhare jawaabon ne khud score diya hai. "Raat ko uske baare mein sochna" = 47 compatibility points. Math clear hai. 😏', close:'Ugh, theek hai...' },
-    { icon:'📊', head:'Data Lie Nahi Karta.', body:'5,847 logon ne yeh test liya. 5,847 ka score 98.7% aaya. Sab galat nahi ho sakte. Dil ki sun lo, Shona. 💜', close:'Shayad algorithm sahi hai...' },
-    { icon:'🫀', head:'"Sirf Dost" Believability: 2.3%', body:'Hamara algorithm specifically yeh metric check karta hai. 2.3% — iska matlab tumhara dil khud yeh nahi maanta. 🥺', close:'2.3% toh hai... 😶' },
-    { icon:'💜', head:'Last Data Point.', body:'Woh Pune se Daman tak dil lekar aaya hai. 98.7% compatible. Aur tum ek "nahi" dhoond rahi ho jo exist hi nahi karta. 🌙', close:'Okay fine. Main sochti hoon. 💕' },
-  ];
-
-  function onNo(){
-    const p=noPops[Math.min(noCnt,noPops.length-1)];
-    document.getElementById('popIcon').textContent=p.icon;
-    document.getElementById('popHead').textContent=p.head;
-    document.getElementById('popBody').textContent=p.body;
-    document.getElementById('popClose').textContent=p.close;
-    document.getElementById('popup').classList.add('show');
-    noCnt++;
-    const nb=document.getElementById('noBtn');
-    nb.style.color=`rgba(244,243,255,${Math.max(0.08,0.18-noCnt*0.04)})`;
-  }
-  function closePopup(){ document.getElementById('popup').classList.remove('show'); }
-
-  function onYes(){
-    document.getElementById('yesScreen').classList.add('show');
-    confetti();
-  }
-  function confetti(){
-    const e=['💕','✨','🎉','💖','🌟','💗','🎊','💜','⭐','🩷','🌸','🔬'];
-    for(let i=0;i<48;i++){
+  // ── Initial burst confetti ──
+  function launchBurst(){
+    const e=['💜','✨','🎉','💕','🌟','💗','🎊','🌸','⭐','🩷','💫','🌙'];
+    for(let i=0;i<55;i++){
       setTimeout(()=>{
         const el=document.createElement('div'); el.className='conf';
         el.textContent=e[Math.floor(Math.random()*e.length)];
         el.style.left=(Math.random()*100)+'vw';
-        el.style.fontSize=(1+Math.random()*1.4)+'rem';
-        const d=2.5+Math.random()*3; el.style.animationDuration=d+'s';
+        el.style.fontSize=(0.9+Math.random()*1.6)+'rem';
+        const d=3+Math.random()*3; el.style.animationDuration=d+'s';
         document.body.appendChild(el);
         setTimeout(()=>el.remove(),d*1000);
-      },i*78);
+      },i*60);
     }
   }
 </script>
