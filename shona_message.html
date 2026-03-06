@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Shona ke liye 💜</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap');
+
+    *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    :root{
+      --bg:#08080f;
+      --card:#111118;
+      --card2:#18181f;
+      --card3:#1f1f28;
+      --border:rgba(180,150,255,0.10);
+      --border2:rgba(180,150,255,0.18);
+      --accent:#f0607a;
+      --accent2:#bf7fff;
+      --bubble:#14142a;
+      --text:#f4f3ff;
+      --text2:rgba(244,243,255,0.58);
+      --text3:rgba(244,243,255,0.30);
+      --green:rgba(80,220,120,0.9);
+    }
+    html,body{ height:100%; }
+    body{
+      min-height:100dvh; background:var(--bg);
+      font-family:'DM Sans',system-ui,sans-serif;
+      display:flex; align-items:flex-start; justify-content:center;
+      overflow-y:auto; overflow-x:hidden; padding-bottom:80px;
+    }
+    body::before{
+      content:''; position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(180,150,255,0.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(180,150,255,0.025) 1px,transparent 1px);
+      background-size:42px 42px; pointer-events:none; z-index:0;
+    }
+    .blob{ position:fixed; border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; }
+    .b1{ width:360px;height:360px;background:#bf7fff;opacity:0.12;top:-120px;right:-120px; }
+    .b2{ width:320px;height:320px;background:#f0607a;opacity:0.10;bottom:-80px;left:-110px; }
+
+    #phone{ position:relative; z-index:10; width:92%; max-width:400px; }
+
+    /* ── top bar ── */
+    .top-bar{
+      position:sticky; top:0; z-index:100;
+      background:rgba(8,8,15,0.94); backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--border2);
+      padding:14px 18px 13px;
+      display:flex; align-items:center; gap:12px;
+    }
+    .avatar{
+      width:42px; height:42px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem; font-weight:700; color:#fff;
+      box-shadow:0 0 0 2.5px rgba(191,127,255,0.28), 0 0 16px rgba(191,127,255,0.18);
+    }
+    .contact-info{ flex:1; }
+    .contact-name{ font-size:0.96rem; font-weight:600; color:var(--text); letter-spacing:0.2px; }
+    .contact-status{ font-size:0.7rem; color:var(--green); display:flex; align-items:center; gap:4px; margin-top:1px; }
+    .sdot{ width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s ease-in-out infinite; }
+    @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .clock{ font-size:0.68rem; color:var(--text3); }
+
+    /* ── chat ── */
+    #chatArea{ padding:20px 16px 16px; display:flex; flex-direction:column; gap:4px; min-height:calc(100dvh - 68px); }
+    .date-stamp{ text-align:center; margin:6px 0 16px; font-size:0.68rem; color:var(--text3); display:flex; align-items:center; gap:8px; }
+    .ds-line{ flex:1; height:1px; background:var(--border); }
+
+    /* bubbles */
+    .msg{ display:flex; align-items:flex-end; gap:9px; opacity:0; transform:translateY(12px); transition:opacity 0.4s ease,transform 0.4s ease; margin-bottom:5px; }
+    .msg.show{ opacity:1; transform:translateY(0); }
+    .msg-av{
+      width:32px;height:32px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:flex;align-items:center;justify-content:center;
+      font-size:0.78rem;font-weight:700;color:#fff;margin-bottom:2px;
+      box-shadow:0 0 0 1.5px rgba(191,127,255,0.22);
+    }
+    .msg-av.hid{ visibility:hidden; }
+
+    .bubble{
+      max-width:80%; background:var(--bubble);
+      border:1px solid var(--border2);
+      border-radius:18px 18px 18px 4px;
+      padding:12px 16px;
+      font-size:0.93rem; color:var(--text); line-height:1.6;
+    }
+    .bubble.special{
+      background:linear-gradient(135deg,rgba(240,96,122,0.14),rgba(191,127,255,0.14));
+      border-color:rgba(240,96,122,0.38);
+      box-shadow:0 0 22px rgba(240,96,122,0.12);
+    }
+    .tick{ display:block; font-size:0.64rem; color:var(--text3); margin-top:5px; text-align:right; }
+
+    /* typing */
+    .typing-bubble{ background:var(--bubble); border:1px solid var(--border2); border-radius:18px 18px 18px 4px; padding:14px 18px; display:inline-flex; align-items:center; gap:5px; }
+    .typing-bubble span{ width:7px;height:7px;border-radius:50%;background:rgba(191,127,255,0.6);animation:dot 1.2s ease-in-out infinite; }
+    .typing-bubble span:nth-child(2){ animation-delay:.2s; }
+    .typing-bubble span:nth-child(3){ animation-delay:.4s; }
+    @keyframes dot{ 0%,60%,100%{transform:translateY(0);opacity:0.35} 30%{transform:translateY(-7px);opacity:1} }
+
+    /* ── reply section ── */
+    #replySection{ opacity:0; transition:opacity 0.5s ease; padding:0 16px; }
+    #replySection.show{ opacity:1; }
+    .reply-card{ background:var(--card); border:1px solid var(--border2); border-radius:20px; padding:22px 20px 20px; }
+    .reply-label{ font-size:0.68rem; color:var(--text3); letter-spacing:1.8px; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+    .reply-label::before,.reply-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+
+    .btn-yes{
+      width:100%;
+      background:linear-gradient(135deg,#f0607a,#bf7fff);
+      color:#fff; border:none; border-radius:13px;
+      padding:17px; font-size:1.02rem; font-weight:700;
+      cursor:pointer; font-family:'DM Sans',sans-serif;
+      letter-spacing:0.3px; margin-bottom:10px;
+      box-shadow:0 4px 20px rgba(191,127,255,0.28);
+      transition:opacity 0.15s, transform 0.12s;
+    }
+    .btn-yes:active{ opacity:0.85; transform:scale(0.97); }
+
+    /* Less visible No button */
+    #noBtn{
+      display:block; width:100%; background:transparent;
+      color:rgba(244,243,255,0.22); border:none;
+      padding:10px; font-size:0.78rem; cursor:pointer;
+      font-family:'DM Sans',sans-serif; text-align:center;
+      letter-spacing:0.3px;
+      transition:color 0.3s;
+    }
+    #noBtn:hover{ color:rgba(244,243,255,0.35); }
+
+    /* ── Emotional popup (bottom sheet) ── */
+    #popup{
+      position:fixed; inset:0; z-index:800;
+      display:flex; align-items:flex-end; justify-content:center;
+      pointer-events:none; opacity:0;
+      transition:opacity 0.3s ease;
+    }
+    #popup.show{ pointer-events:all; opacity:1; }
+
+    .popup-backdrop{
+      position:absolute; inset:0;
+      background:rgba(0,0,0,0.65);
+      backdrop-filter:blur(6px);
+    }
+
+    .popup-sheet{
+      position:relative; z-index:1;
+      width:100%; max-width:400px;
+      background:var(--card);
+      border:1px solid var(--border2);
+      border-radius:24px 24px 0 0;
+      padding:28px 24px 36px;
+      text-align:center;
+      transform:translateY(100%);
+      transition:transform 0.38s cubic-bezier(0.34,1.2,0.64,1);
+    }
+    #popup.show .popup-sheet{ transform:translateY(0); }
+
+    .popup-handle{ width:36px;height:4px;border-radius:2px;background:var(--border2);margin:0 auto 22px; }
+    .popup-av{
+      width:58px;height:58px;border-radius:50%;margin:0 auto 16px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.5rem;font-weight:700;color:#fff;
+      box-shadow:0 0 0 3px rgba(191,127,255,0.22), 0 0 24px rgba(191,127,255,0.2);
+    }
+    .popup-name{ font-size:0.7rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px; }
+    .popup-msg{
+      font-family:'DM Serif Display',Georgia,serif;
+      font-size:1.22rem; color:var(--text);
+      line-height:1.5; margin-bottom:8px;
+    }
+    .popup-sub{ font-size:0.84rem;color:var(--text2);line-height:1.6;margin-bottom:24px; }
+
+    .popup-close{
+      width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; border:none; border-radius:13px;
+      padding:15px; font-size:0.95rem; font-weight:600;
+      cursor:pointer; font-family:'DM Sans',sans-serif;
+      box-shadow:0 4px 18px rgba(191,127,255,0.25);
+    }
+    .popup-dismiss{
+      width:100%; background:transparent; color:var(--text3);
+      border:none; padding:12px; font-size:0.8rem;
+      cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:4px;
+    }
+
+    /* ── YES screen ── */
+    #yesScreen{ display:none;position:fixed;inset:0;z-index:999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:28px; }
+    #yesScreen.show{ display:flex;animation:fadeIn 0.45s ease; }
+    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
+    .yes-card{ background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:34px 24px 30px;width:100%;max-width:400px;text-align:center;animation:popIn 0.55s cubic-bezier(0.34,1.3,0.64,1) both; }
+    @keyframes popIn{ from{opacity:0;transform:scale(0.82)} to{opacity:1;transform:scale(1)} }
+    .yes-chat{ text-align:left; margin-bottom:20px; }
+    .yes-recv{ display:flex;gap:9px;align-items:flex-end;margin-bottom:8px; }
+    .yes-sent{ display:flex;justify-content:flex-end;margin-bottom:8px; }
+    .yes-sent .bubble{ background:linear-gradient(135deg,rgba(240,96,122,0.2),rgba(191,127,255,0.2));border-color:rgba(191,127,255,0.3);border-radius:18px 18px 4px 18px;font-size:0.88rem; }
+    .yes-recv .bubble{ font-size:0.88rem; }
+    .yes-bottom{ padding-top:4px; }
+    .yes-emoji{ font-size:3.8rem;display:block;margin-bottom:12px;animation:spinPop 0.75s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes spinPop{ from{transform:scale(0.1) rotate(-20deg)} to{transform:scale(1) rotate(0)} }
+    .yes-title{ font-family:'DM Serif Display',Georgia,serif;font-size:2rem;color:var(--text);margin-bottom:8px; }
+    .yes-div{ height:1px;background:var(--border);margin:14px 0; }
+    .yes-msg{ font-size:0.88rem;color:var(--text2);line-height:1.9; }
+    .yes-msg strong{ color:var(--text);font-weight:600; }
+
+    /* confetti */
+    .conf{ position:fixed;top:-20px;pointer-events:none;z-index:9999;animation:fall linear forwards; }
+    @keyframes fall{ 0%{transform:translateY(0) rotate(0);opacity:1} 100%{transform:translateY(115vh) rotate(420deg);opacity:0} }
+  </style>
+</head>
+<body>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
+
+<div id="phone">
+  <div class="top-bar">
+    <div class="avatar">S</div>
+    <div class="contact-info">
+      <div class="contact-name">Shona 💜</div>
+      <div class="contact-status"><span class="sdot"></span> Online abhi</div>
+    </div>
+    <div class="clock" id="clk"></div>
+  </div>
+
+  <div id="chatArea">
+    <div class="date-stamp"><span class="ds-line"></span><span>Aaj</span><span class="ds-line"></span></div>
+  </div>
+
+  <div id="replySection">
+    <div class="reply-card">
+      <div class="reply-label">Tumhara jawab</div>
+      <button class="btn-yes" onclick="onYes()">Haan, main bhi feel karti hoon 💕</button>
+      <button id="noBtn" onclick="onNo()">nahi karti</button>
+    </div>
+  </div>
+</div>
+
+<!-- Emotional Popup -->
+<div id="popup">
+  <div class="popup-backdrop" onclick="closePopup()"></div>
+  <div class="popup-sheet">
+    <div class="popup-handle"></div>
+    <div class="popup-av" id="popAv">S</div>
+    <div class="popup-name">Uski taraf se</div>
+    <div class="popup-msg" id="popMsg"></div>
+    <div class="popup-sub" id="popSub"></div>
+    <button class="popup-close" id="popClose" onclick="closePopup()"></button>
+    <button class="popup-dismiss" onclick="closePopup()">Band karo</button>
+  </div>
+</div>
+
+<!-- YES screen -->
+<div id="yesScreen">
+  <div class="yes-card">
+    <div class="yes-chat">
+      <div class="yes-recv">
+        <div class="msg-av">S</div>
+        <div class="bubble">Main jaanta tha, Shona. 🥺<span class="tick">abhi • ✓✓</span></div>
+      </div>
+      <div class="yes-sent">
+        <div class="bubble">Haan, main bhi feel karti hoon 💕<span class="tick">abhi • ✓✓</span></div>
+      </div>
+      <div class="yes-recv">
+        <div class="msg-av hid"></div>
+        <div class="bubble">Yeh sunke dil khush ho gaya. Ab tum meri ho — officially. 🔒💜<span class="tick">abhi • ✓✓</span></div>
+      </div>
+    </div>
+    <div class="yes-bottom">
+      <span class="yes-emoji">🥰</span>
+      <h2 class="yes-title">Finally. 💜</h2>
+      <div class="yes-div"></div>
+      <p class="yes-msg"><strong>Sonali + main = forever.</strong><br>Koi undo nahi kar sakta ab yeh. 🌙</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Clock
+  const clkEl = document.getElementById('clk');
+  function tick(){ const n=new Date(); clkEl.textContent=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); }
+  tick(); setInterval(tick,30000);
+
+  // Messages
+  const msgs = [
+    { text:"Shona... 🥺",                                                                             delay:800,  typing:1100 },
+    { text:"Pata nahi kaise shuru karun yeh baat.",                                                   delay:2400, typing:1700 },
+    { text:"Bahut dino se kuch feel ho raha hai... jo bol nahi paa raha tha.",                        delay:5000, typing:2000 },
+    { text:"Subah uthke sabse pehle tumhara khayal aata hai. Raat ko bhi last thought tum hi hoti ho.", delay:8200, typing:2800 },
+    { text:"Jab tum hasti ho... sach mein dil bhaag jaata hai. 😭",                                   delay:12200,typing:2000 },
+    { text:"Aur jab tum door hoti ho, phone baar baar check karta rehta hoon — bas ek message ke liye.", delay:15400,typing:2600 },
+    { text:"Nahi pata tum bhi feel karti ho ya nahi...",                                               delay:19200,typing:1700 },
+    { text:"Lekin main nahi reh sakta bina bataye.",                                                   delay:22000,typing:1500 },
+    { text:"Shona, main tumse pyaar karta hoon. 💜",                                                  delay:24600,typing:1900, special:true },
+    { text:"Bas ek baar bol do — kya tum bhi feel karti ho jo main feel karta hoon? 🥺",              delay:27800,typing:2400, last:true },
+  ];
+
+  const chatArea = document.getElementById('chatArea');
+  function getTime(){ const n=new Date(); return String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0'); }
+  function scrollEnd(){ setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),90); }
+
+  function addTyping(){
+    const r=document.createElement('div'); r.className='msg'; r.id='tr';
+    r.innerHTML=`<div class="msg-av">S</div><div class="typing-bubble"><span></span><span></span><span></span></div>`;
+    chatArea.appendChild(r); setTimeout(()=>r.classList.add('show'),30); scrollEnd(); return r;
+  }
+
+  function addMsg(m, idx){
+    const tr=addTyping();
+    setTimeout(()=>{
+      tr.remove();
+      const showAv = idx===0 || msgs[idx-1]?.last;
+      const r=document.createElement('div'); r.className='msg';
+      r.innerHTML=`
+        <div class="msg-av${showAv?'':' hid'}">${showAv?'S':''}</div>
+        <div class="bubble${m.special?' special':''}">
+          ${m.text}<span class="tick">${getTime()} • ✓</span>
+        </div>`;
+      chatArea.appendChild(r); setTimeout(()=>r.classList.add('show'),30); scrollEnd();
+      if(m.last) setTimeout(showReply,1400);
+    }, m.typing);
+  }
+
+  msgs.forEach((m,i)=>setTimeout(()=>addMsg(m,i), m.delay));
+
+  function showReply(){
+    const rs=document.getElementById('replySection');
+    rs.classList.add('show');
+    setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),120);
+  }
+
+  // ── Emotional popups ──
+  let noCnt = 0;
+  const noPopups = [
+    {
+      msg: "Shona... sach mein? 🥺",
+      sub: "Itna sab padh ke bhi... koi baat nahi. Main tumhara intezaar karunga.",
+      close: "Theek hai, sochti hoon... 💜"
+    },
+    {
+      msg: "Feelings force nahi hoti, main samjhunga.",
+      sub: "Lekin kya tum sure ho? Kabhi kabhi dil ko waqt lagta hai. Main hoon yahaan — jab bhi ready ho. 🌙",
+      close: "Achha... thoda sochne do"
+    },
+    {
+      msg: "Yaar Shona... 😔",
+      sub: "Har roz tumhari ek jhalak ke liye din accha lagta hai. Kya yeh kuch nahi kehta tumhare dil ko?",
+      close: "Shayad kuch toh hai... 🥺"
+    },
+    {
+      msg: "Theek hai, last baar pooch raha hoon. 💜",
+      sub: "Kya kabhi — ek second ke liye bhi — tumhare dil mein kuch aaya mujhe lekar? Sach sach batao.",
+      close: "Haan... thoda toh feel hota hai 😶"
+    },
+    {
+      msg: "Main haar nahi maan raha. 🌙",
+      sub: "Tum meri smile ho, Shona. Chahe tum kuch bhi kaho — main hamesha yahaan rahunga. Kyunki tum worth it ho. Always.",
+      close: "Okay... tum bahut sweet ho 💕"
+    },
+  ];
+
+  // Also update No button text as she keeps clicking
+  const noBtnLabels = [
+    "nahi karti",
+    "nahi... shayad",
+    "pata nahi...",
+    "soch rahi hoon",
+    "...",
+  ];
+
+  function onNo(){
+    const p = noPopups[Math.min(noCnt, noPopups.length-1)];
+    document.getElementById('popMsg').textContent   = p.msg;
+    document.getElementById('popSub').textContent   = p.sub;
+    document.getElementById('popClose').textContent = p.close;
+    document.getElementById('popup').classList.add('show');
+    noCnt++;
+    // update button text
+    const noBtn = document.getElementById('noBtn');
+    noBtn.textContent = noBtnLabels[Math.min(noCnt, noBtnLabels.length-1)];
+    // fade it more each time
+    noBtn.style.color = `rgba(244,243,255,${Math.max(0.08, 0.22 - noCnt*0.04)})`;
+  }
+
+  function closePopup(){
+    document.getElementById('popup').classList.remove('show');
+  }
+
+  function onYes(){
+    document.getElementById('yesScreen').classList.add('show');
+    confetti();
+  }
+
+  function confetti(){
+    const e=['💕','✨','🎉','💖','🌟','💗','🎊','💜','⭐','🩷','🌸','🫧'];
+    for(let i=0;i<48;i++){
+      setTimeout(()=>{
+        const el=document.createElement('div'); el.className='conf';
+        el.textContent=e[Math.floor(Math.random()*e.length)];
+        el.style.left=(Math.random()*100)+'vw';
+        el.style.fontSize=(1+Math.random()*1.4)+'rem';
+        const d=2.5+Math.random()*3; el.style.animationDuration=d+'s';
+        document.body.appendChild(el);
+        setTimeout(()=>el.remove(),d*1000);
+      },i*78);
+    }
+  }
+</script>
+</body>
+</html>
