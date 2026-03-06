@@ -3,463 +3,552 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>The Dil Times</title>
+  <title>Compatibility Test 💜</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=UnifrakturMaguntia&family=DM+Sans:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap');
 
-    *{ margin:0; padding:0; box-sizing:border-box; }
-
+    *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     :root{
-      --paper: #f5f0e0;
-      --paper2: #ede8d5;
-      --ink: #1a1612;
-      --ink2: #3a342a;
-      --ink3: #7a6e5e;
-      --red: #c0202a;
-      --rule: rgba(26,22,18,0.18);
+      --bg:#08080f; --card:#111118; --card2:#18181f; --card3:#1f1f2a;
+      --border:rgba(180,150,255,0.10); --border2:rgba(180,150,255,0.20);
+      --accent:#f0607a; --accent2:#bf7fff;
+      --text:#f4f3ff; --text2:rgba(244,243,255,0.55); --text3:rgba(244,243,255,0.28);
     }
-
+    html,body{ height:100%; }
     body{
-      background: #c8b89a;
-      font-family: 'Playfair Display', Georgia, serif;
-      min-height:100dvh;
-      display:flex; flex-direction:column; align-items:center;
-      padding: 12px 8px 48px;
+      min-height:100dvh; background:var(--bg);
+      font-family:'DM Sans',system-ui,sans-serif;
+      display:flex; align-items:flex-start; justify-content:center;
+      overflow-y:auto; overflow-x:hidden; padding:24px 0 72px;
     }
+    body::before{
+      content:''; position:fixed; inset:0;
+      background-image:
+        linear-gradient(rgba(180,150,255,0.022) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(180,150,255,0.022) 1px,transparent 1px);
+      background-size:42px 42px; pointer-events:none; z-index:0;
+    }
+    .blob{ position:fixed; border-radius:50%; filter:blur(100px); pointer-events:none; z-index:0; }
+    .b1{ width:340px;height:340px;background:#bf7fff;opacity:0.11;top:-110px;right:-110px; }
+    .b2{ width:300px;height:300px;background:#f0607a;opacity:0.09;bottom:-80px;left:-110px; }
 
-    /* ── Paper ── */
-    .paper{
-      background: var(--paper);
-      width:100%; max-width:480px;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.35), inset 0 0 80px rgba(180,160,120,0.15);
-      position:relative;
-    }
-    /* paper texture overlay */
-    .paper::before{
-      content:''; position:absolute; inset:0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23f5f0e0'/%3E%3Ccircle cx='1' cy='1' r='0.5' fill='rgba(100,80,40,0.06)'/%3E%3C/svg%3E");
-      pointer-events:none; z-index:0;
-    }
-    .paper > *{ position:relative; z-index:1; }
+    #wrap{ position:relative; z-index:10; width:92%; max-width:400px; }
 
-    /* ── Masthead ── */
-    .masthead{
-      border-bottom: 3px double var(--ink);
-      padding: 10px 14px 8px;
-      text-align: center;
+    /* ── Header ── */
+    .test-header{ text-align:center; margin-bottom:24px; animation:fadeUp 0.5s ease both; }
+    .test-tag{
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(191,127,255,0.1); border:1px solid rgba(191,127,255,0.22);
+      border-radius:30px; padding:5px 14px;
+      color:var(--accent2); font-size:0.7rem; letter-spacing:2px; text-transform:uppercase;
+      margin-bottom:14px;
     }
-    .mast-top{
-      display:flex; justify-content:space-between; align-items:center;
-      font-family:'DM Sans',sans-serif;
-      font-size:0.62rem; color:var(--ink3);
-      border-bottom:1px solid var(--rule); padding-bottom:6px; margin-bottom:8px;
-    }
-    .paper-name{
-      font-family:'UnifrakturMaguntia',cursive;
-      font-size:2.8rem; color:var(--ink); line-height:1;
-      letter-spacing:1px;
-    }
-    .paper-tagline{
-      font-size:0.65rem; color:var(--ink3); font-style:italic;
-      margin-top:2px; letter-spacing:1.5px;
-    }
-    .mast-bottom{
-      display:flex; justify-content:space-between; align-items:center;
-      border-top:1px solid var(--rule); padding-top:6px; margin-top:6px;
-      font-family:'DM Sans',sans-serif; font-size:0.6rem; color:var(--ink3);
-    }
+    .tdot{ width:5px;height:5px;border-radius:50%;background:var(--accent2);animation:blink 1.2s infinite; }
+    @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:0.15} }
+    .test-title{ font-family:'DM Serif Display',Georgia,serif; font-size:1.8rem; color:var(--text); margin-bottom:6px; line-height:1.2; }
+    .test-title em{ font-style:italic; color:var(--accent); }
+    .test-sub{ font-size:0.84rem; color:var(--text2); line-height:1.5; }
 
-    /* ── Ticker ── */
-    .ticker{
-      background:var(--ink); color:var(--paper);
-      padding:5px 0; overflow:hidden; position:relative;
-      font-family:'DM Sans',sans-serif; font-size:0.7rem;
-      display:flex; align-items:center;
-    }
-    .ticker-label{
-      background:var(--red); padding:5px 10px;
-      font-weight:700; font-size:0.65rem; letter-spacing:1px;
-      flex-shrink:0; height:100%; display:flex; align-items:center;
-    }
-    .ticker-track{ overflow:hidden; flex:1; }
-    .ticker-inner{
-      white-space:nowrap;
-      animation:tickerScroll 22s linear infinite;
-      padding-left:100%;
-    }
-    @keyframes tickerScroll{ 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    /* ── Progress bar ── */
+    .prog-wrap{ margin-bottom:20px; animation:fadeUp 0.5s 0.1s ease both; }
+    .prog-labels{ display:flex; justify-content:space-between; margin-bottom:7px; }
+    .prog-label{ font-size:0.68rem; color:var(--text3); letter-spacing:1px; text-transform:uppercase; }
+    #progPct{ color:var(--accent2); font-weight:600; }
+    .prog-track{ height:4px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+    #progBar{ height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); border-radius:4px; transition:width 0.5s cubic-bezier(0.34,1.2,0.64,1); }
 
-    /* ── Content area ── */
-    .content{ padding:0 12px; }
+    /* ── Question card ── */
+    #qCard{
+      background:var(--card); border:1px solid var(--border2);
+      border-radius:22px; padding:26px 22px 22px;
+      margin-bottom:12px;
+      animation:fadeUp 0.45s ease both;
+    }
+    @keyframes fadeUp{ from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+    .q-num{ font-size:0.68rem; color:var(--text3); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:12px; }
+    .q-text{ font-family:'DM Serif Display',Georgia,serif; font-size:1.25rem; color:var(--text); line-height:1.4; margin-bottom:20px; }
+    .q-note{ font-size:0.78rem; color:var(--text2); font-style:italic; margin-bottom:20px; margin-top:-12px; }
 
-    /* ── Section rules ── */
-    .rule{ height:1px; background:var(--ink); margin:8px 0; }
-    .rule-double{ border-top:3px double var(--ink); margin:8px 0; }
-    .rule-thin{ height:1px; background:var(--rule); margin:6px 0; }
+    /* Options */
+    .options{ display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+    .opt{
+      background:var(--card2); border:1px solid var(--border);
+      border-radius:13px; padding:13px 16px;
+      display:flex; align-items:center; gap:12px;
+      cursor:pointer; transition:all 0.2s ease;
+      -webkit-user-select:none; user-select:none;
+    }
+    .opt:active{ transform:scale(0.98); }
+    .opt.selected{
+      background:rgba(191,127,255,0.12);
+      border-color:rgba(191,127,255,0.45);
+      box-shadow:0 0 16px rgba(191,127,255,0.12);
+    }
+    .opt-radio{
+      width:20px; height:20px; border-radius:50%; flex-shrink:0;
+      border:1.5px solid var(--border2);
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.2s;
+    }
+    .opt.selected .opt-radio{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      border-color:transparent;
+    }
+    .opt-radio::after{
+      content:''; width:7px; height:7px; border-radius:50%;
+      background:#fff; opacity:0; transition:opacity 0.2s;
+    }
+    .opt.selected .opt-radio::after{ opacity:1; }
+    .opt-text{ font-size:0.88rem; color:var(--text2); line-height:1.4; flex:1; }
+    .opt.selected .opt-text{ color:var(--text); }
+    .opt-emoji{ font-size:1.1rem; flex-shrink:0; }
 
-    /* ── BREAKING banner ── */
-    .breaking-bar{
-      background:var(--red); color:#fff;
-      text-align:center; padding:4px 10px;
-      font-family:'DM Sans',sans-serif;
-      font-size:0.65rem; font-weight:700; letter-spacing:2.5px;
-      margin:8px 0 6px;
+    /* Next button */
+    #nextBtn{
+      width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; border:none; border-radius:13px;
+      padding:16px; font-size:0.98rem; font-weight:700;
+      cursor:pointer; font-family:'DM Sans',sans-serif;
+      opacity:0.35; pointer-events:none;
+      transition:opacity 0.25s, transform 0.12s;
+      box-shadow:0 4px 20px rgba(191,127,255,0.0);
     }
+    #nextBtn.active{
+      opacity:1; pointer-events:all;
+      box-shadow:0 4px 20px rgba(191,127,255,0.28);
+    }
+    #nextBtn:active{ transform:scale(0.97); }
 
-    /* ── Main Headline ── */
-    .main-headline{
-      text-align:center; padding:10px 0 6px;
-      border-bottom:2px solid var(--ink);
+    /* ── Loading screen ── */
+    #loadScreen{
+      display:none; background:var(--card); border:1px solid var(--border2);
+      border-radius:22px; padding:36px 24px;
+      text-align:center; animation:fadeUp 0.5s ease both;
     }
-    .hl-kicker{
-      font-family:'DM Sans',sans-serif; font-size:0.62rem;
-      font-weight:700; letter-spacing:2px; text-transform:uppercase;
-      color:var(--ink3); margin-bottom:6px;
+    #loadScreen.show{ display:block; }
+    .load-emoji{ font-size:3.5rem; display:block; margin-bottom:16px; animation:spin 2s linear infinite; }
+    @keyframes spin{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .load-title{ font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--text); margin-bottom:6px; }
+    .load-sub{ font-size:0.82rem; color:var(--text2); margin-bottom:24px; }
+    .load-steps{ text-align:left; display:flex; flex-direction:column; gap:10px; }
+    .load-step{
+      display:flex; align-items:center; gap:10px;
+      font-size:0.78rem; color:var(--text3); opacity:0;
+      transition:opacity 0.4s, color 0.4s;
     }
-    .hl-main{
-      font-size:1.75rem; font-weight:900; line-height:1.15;
-      color:var(--ink); font-style:italic;
+    .load-step.done{ opacity:1; color:rgba(244,243,255,0.6); }
+    .load-step.active{ opacity:1; color:var(--accent2); }
+    .load-step-icon{ font-size:0.9rem; flex-shrink:0; width:20px; text-align:center; }
+    .step-spinner{
+      width:14px; height:14px; border-radius:50%;
+      border:2px solid rgba(191,127,255,0.2);
+      border-top-color:var(--accent2);
+      animation:spin 0.8s linear infinite; flex-shrink:0;
     }
-    .hl-main em{ font-style:normal; }
-    .hl-deck{
-      font-size:0.82rem; color:var(--ink2); line-height:1.5;
-      margin-top:7px; font-family:'DM Sans',sans-serif;
-      font-style:italic;
-    }
+    .step-check{ color:rgba(90,210,110,0.9); font-size:0.85rem; flex-shrink:0; }
 
-    /* ── 2-col grid ── */
-    .two-col{
-      display:grid; grid-template-columns:1fr 1fr;
-      gap:0;
-      border-bottom:1px solid var(--ink);
-    }
-    .col{ padding:10px 10px 12px; }
-    .col:first-child{ border-right:1px solid var(--ink); }
+    /* ── Result screen ── */
+    #resultScreen{ display:none; animation:fadeUp 0.5s ease both; }
+    #resultScreen.show{ display:block; }
 
-    /* ── Article ── */
-    .art-label{
-      font-family:'DM Sans',sans-serif; font-size:0.58rem;
-      font-weight:700; letter-spacing:2px; text-transform:uppercase;
-      color:var(--red); margin-bottom:4px;
+    .result-hero{
+      background:var(--card); border:1px solid var(--border2);
+      border-radius:22px; padding:30px 24px 26px;
+      text-align:center; margin-bottom:12px;
+      box-shadow:0 0 60px rgba(191,127,255,0.1);
     }
-    .art-head{ font-size:1.0rem; font-weight:700; line-height:1.2; color:var(--ink); margin-bottom:6px; }
-    .art-by{ font-family:'DM Sans',sans-serif; font-size:0.6rem; color:var(--ink3); margin-bottom:6px; font-style:italic; }
-    .art-body{
-      font-family:'DM Sans',sans-serif; font-size:0.73rem;
-      color:var(--ink2); line-height:1.65; text-align:justify;
+    .result-tag{
+      display:inline-flex; align-items:center; gap:6px;
+      background:rgba(90,210,110,0.1); border:1px solid rgba(90,210,110,0.22);
+      border-radius:30px; padding:5px 14px;
+      color:rgba(90,210,110,0.9); font-size:0.68rem;
+      letter-spacing:2px; text-transform:uppercase; margin-bottom:18px;
     }
-    .art-body p{ margin-bottom:5px; }
-
-    /* ── Full-width article ── */
-    .full-art{ padding:10px 0 10px; border-bottom:1px solid var(--ink); }
-
-    /* ── Quote block ── */
-    .quote-block{
-      border-left:3px solid var(--ink); padding:8px 12px;
-      margin:8px 0;
-      background:rgba(0,0,0,0.03);
+    .rtag-dot{ width:5px;height:5px;border-radius:50%;background:rgba(90,210,110,0.9);animation:blink 1.2s infinite; }
+    .pct-display{
+      font-family:'DM Serif Display',serif;
+      font-size:5rem; font-weight:900; line-height:1;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      margin-bottom:4px; animation:countUp 1.5s ease both;
     }
-    .quote-text{ font-size:0.88rem; font-style:italic; color:var(--ink); line-height:1.5; }
-    .quote-src{ font-family:'DM Sans',sans-serif; font-size:0.62rem; color:var(--ink3); margin-top:4px; }
-
-    /* ── Info box ── */
-    .info-box{
-      border:1px solid var(--ink); padding:10px 12px; margin:8px 0;
-      background:rgba(0,0,0,0.03);
+    @keyframes countUp{ from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
+    .pct-label{ font-size:0.82rem; color:var(--text2); margin-bottom:6px; }
+    .pct-verdict{
+      font-family:'DM Serif Display',serif;
+      font-size:1.5rem; color:var(--text); margin-bottom:4px;
     }
-    .info-box-title{
-      font-family:'DM Sans',sans-serif; font-size:0.62rem;
-      font-weight:700; letter-spacing:2px; text-transform:uppercase;
-      border-bottom:1px solid var(--rule); padding-bottom:4px; margin-bottom:7px;
-      color:var(--ink);
+    .pct-note{ font-size:0.8rem; color:var(--text2); font-style:italic; margin-bottom:20px; }
+
+    /* breakdown bars */
+    .breakdown{ display:flex; flex-direction:column; gap:12px; text-align:left; margin-top:8px; }
+    .bk-row{}
+    .bk-top{ display:flex; justify-content:space-between; margin-bottom:5px; }
+    .bk-label{ font-size:0.74rem; color:var(--text2); }
+    .bk-val{ font-size:0.74rem; color:var(--accent2); font-weight:600; }
+    .bk-track{ height:5px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+    .bk-fill{ height:100%; border-radius:4px; background:linear-gradient(90deg,var(--accent),var(--accent2)); width:0%; transition:width 1.2s cubic-bezier(0.34,1.0,0.64,1); }
+
+    /* disclaimer */
+    .disclaimer{
+      background:rgba(240,96,122,0.06); border:1px solid rgba(240,96,122,0.15);
+      border-radius:12px; padding:12px 14px; margin-top:16px;
+      font-size:0.74rem; color:var(--text2); line-height:1.5; text-align:left;
     }
-    .info-row{ display:flex; justify-content:space-between; margin-bottom:4px; }
-    .info-k{ font-family:'DM Sans',sans-serif; font-size:0.68rem; color:var(--ink3); }
-    .info-v{ font-family:'DM Sans',sans-serif; font-size:0.68rem; font-weight:600; color:var(--ink); }
-    .info-v.red{ color:var(--red); }
-    .info-v.green{ color:#2a7a2a; }
+    .disclaimer strong{ color:var(--accent); }
 
-    /* ── Weather & small boxes ── */
-    .bottom-row{ display:grid; grid-template-columns:1fr 1fr; gap:0; border-bottom:1px solid var(--ink); }
-    .btm-col{ padding:10px; }
-    .btm-col:first-child{ border-right:1px solid var(--ink); }
-    .btm-title{ font-family:'DM Sans',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); border-bottom:1px solid var(--rule); padding-bottom:4px; margin-bottom:7px; }
-    .weather-main{ font-size:1.6rem; text-align:center; margin:4px 0; }
-    .weather-desc{ font-family:'DM Sans',sans-serif; font-size:0.65rem; color:var(--ink2); text-align:center; line-height:1.4; }
-    .market-row{ display:flex; justify-content:space-between; margin-bottom:3px; }
-    .market-k{ font-family:'DM Sans',sans-serif; font-size:0.65rem; color:var(--ink2); }
-    .market-v{ font-family:'DM Sans',sans-serif; font-size:0.65rem; font-weight:600; }
-    .up{ color:#2a7a2a; } .down{ color:var(--red); }
-
-    /* ── Poll / CTA ── */
-    .poll-section{ padding:14px 12px 18px; text-align:center; }
-    .poll-title{ font-family:'DM Sans',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--ink3); margin-bottom:10px; }
-    .poll-q{ font-size:1.1rem; font-weight:700; color:var(--ink); margin-bottom:14px; line-height:1.3; }
+    /* CTA */
+    .cta-card{
+      background:var(--card); border:1px solid var(--border2);
+      border-radius:22px; padding:24px 22px;
+    }
+    .cta-label{ font-size:0.68rem; color:var(--text3); letter-spacing:1.8px; text-transform:uppercase; margin-bottom:12px; display:flex; align-items:center; gap:8px; }
+    .cta-label::before,.cta-label::after{ content:''; flex:1; height:1px; background:var(--border); }
+    .cta-q{ font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--text); margin-bottom:16px; text-align:center; line-height:1.4; }
 
     .btn-yes{
-      display:block; width:100%;
-      background:var(--ink); color:var(--paper);
-      border:none; border-radius:0;
-      padding:15px; font-family:'Playfair Display',serif;
-      font-size:1.0rem; font-style:italic; font-weight:700;
-      cursor:pointer; margin-bottom:8px;
-      transition:background 0.15s;
-      letter-spacing:0.5px;
+      width:100%; background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; border:none; border-radius:13px;
+      padding:17px; font-size:1.0rem; font-weight:700;
+      cursor:pointer; font-family:'DM Sans',sans-serif;
+      box-shadow:0 4px 22px rgba(191,127,255,0.28);
+      margin-bottom:10px; transition:opacity 0.15s, transform 0.12s;
     }
-    .btn-yes:active{ background:#333; }
-
+    .btn-yes:active{ opacity:0.85; transform:scale(0.97); }
     #noBtn{
-      display:block; width:100%;
-      background:transparent; color:var(--ink3);
-      border:none; padding:8px;
-      font-family:'DM Sans',sans-serif; font-size:0.68rem;
-      cursor:pointer; opacity:0.45;
-      text-decoration:underline; text-underline-offset:2px;
+      display:block; width:100%; background:transparent; border:none;
+      color:rgba(244,243,255,0.18); font-size:0.72rem;
+      padding:8px; cursor:pointer; font-family:'DM Sans',sans-serif;
+      text-align:center;
     }
 
-    /* popup (emotional) */
+    /* popup */
     #popup{ position:fixed;inset:0;z-index:800;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;opacity:0;transition:opacity 0.3s; }
     #popup.show{ pointer-events:all;opacity:1; }
-    .pop-back{ position:absolute;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px); }
+    .pop-back{ position:absolute;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px); }
     .pop-sheet{
-      position:relative;z-index:1;width:100%;max-width:480px;
-      background:var(--paper);
-      border-top:3px double var(--ink);
-      padding:24px 22px 36px; text-align:center;
+      position:relative;z-index:1;width:100%;max-width:400px;
+      background:var(--card); border:1px solid var(--border2);
+      border-radius:24px 24px 0 0;
+      padding:26px 24px 40px; text-align:center;
       transform:translateY(100%);
       transition:transform 0.38s cubic-bezier(0.34,1.2,0.64,1);
     }
     #popup.show .pop-sheet{ transform:translateY(0); }
-    .pop-handle{ width:36px;height:3px;background:var(--rule);margin:0 auto 18px;border-radius:2px; }
-    .pop-breaking{ background:var(--red);color:#fff;font-family:'DM Sans',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:2px;padding:3px 10px;display:inline-block;margin-bottom:12px; }
-    .pop-head{ font-size:1.2rem;font-weight:700;font-style:italic;color:var(--ink);line-height:1.3;margin-bottom:8px; }
-    .pop-body{ font-family:'DM Sans',sans-serif;font-size:0.8rem;color:var(--ink2);line-height:1.6;margin-bottom:20px; }
-    .pop-close{
-      width:100%;background:var(--ink);color:var(--paper);border:none;
-      padding:13px;font-family:'Playfair Display',serif;font-size:0.92rem;
-      font-style:italic;cursor:pointer;margin-bottom:6px;
-    }
-    .pop-dismiss{ background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:0.72rem;color:var(--ink3);cursor:pointer;text-decoration:underline; }
+    .pop-handle{ width:36px;height:3px;border-radius:2px;background:var(--border2);margin:0 auto 20px; }
+    .pop-icon{ font-size:2.5rem;margin-bottom:12px;display:block; }
+    .pop-head{ font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--text);margin-bottom:8px;line-height:1.3; }
+    .pop-body{ font-size:0.84rem;color:var(--text2);line-height:1.65;margin-bottom:22px; }
+    .pop-close{ width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:13px;padding:14px;font-size:0.92rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px; }
+    .pop-dismiss{ background:transparent;border:none;font-size:0.74rem;color:var(--text3);cursor:pointer;font-family:'DM Sans',sans-serif; }
 
-    /* YES screen */
-    #yesScreen{ display:none;position:fixed;inset:0;z-index:999;background:var(--paper);flex-direction:column;align-items:center;justify-content:center;padding:28px; }
-    #yesScreen.show{ display:flex;animation:fadeIn 0.4s ease; }
-    @keyframes fadeIn{ from{opacity:0} to{opacity:1} }
-    .yes-paper{ background:var(--paper);border:2px solid var(--ink);padding:32px 24px;width:100%;max-width:380px;text-align:center; box-shadow:4px 4px 0 var(--ink); }
-    .yes-kicker{ font-family:'DM Sans',sans-serif;font-size:0.62rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:10px; }
-    .yes-emoji{ font-size:3.5rem;display:block;margin-bottom:12px; }
-    .yes-head{ font-size:1.8rem;font-weight:900;font-style:italic;color:var(--ink);margin-bottom:8px;line-height:1.2; }
-    .yes-rule{ border:none;border-top:2px solid var(--ink);margin:14px 0; }
-    .yes-body{ font-family:'DM Sans',sans-serif;font-size:0.82rem;color:var(--ink2);line-height:1.7; }
-    .yes-body strong{ color:var(--ink); }
+    /* yes screen */
+    #yesScreen{ display:none;position:fixed;inset:0;z-index:999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;padding:28px; }
+    #yesScreen.show{ display:flex;animation:fadeUp 0.45s ease; }
+    .yes-card{ background:var(--card);border:1px solid var(--border2);border-radius:22px;padding:36px 26px 30px;width:100%;max-width:400px;text-align:center;animation:popIn 0.55s cubic-bezier(0.34,1.3,0.64,1) both; }
+    @keyframes popIn{ from{opacity:0;transform:scale(0.82)} to{opacity:1;transform:scale(1)} }
+    .yes-tag{ font-size:0.68rem;color:var(--accent2);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px;opacity:0.8; }
+    .yes-emoji{ font-size:4rem;display:block;margin-bottom:12px;animation:spinPop 0.7s cubic-bezier(0.34,1.56,0.64,1); }
+    @keyframes spinPop{ from{transform:scale(0.1) rotate(-20deg)} to{transform:scale(1) rotate(0)} }
+    .yes-title{ font-family:'DM Serif Display',serif;font-size:1.9rem;color:var(--text);margin-bottom:8px; }
+    .yes-div{ height:1px;background:var(--border);margin:14px 0; }
+    .yes-msg{ font-size:0.88rem;color:var(--text2);line-height:1.85; }
+    .yes-msg strong{ color:var(--text);font-weight:600; }
 
     .conf{ position:fixed;top:-20px;pointer-events:none;z-index:9999;animation:fall linear forwards; }
-    @keyframes fall{ 0%{transform:translateY(0) rotate(0);opacity:1} 100%{transform:translateY(115vh) rotate(400deg);opacity:0} }
+    @keyframes fall{ 0%{transform:translateY(0) rotate(0);opacity:1} 100%{transform:translateY(115vh) rotate(420deg);opacity:0} }
   </style>
 </head>
 <body>
+<div class="blob b1"></div>
+<div class="blob b2"></div>
 
-<div class="paper">
+<div id="wrap">
 
-  <!-- Masthead -->
-  <div class="masthead">
-    <div class="mast-top">
-      <span>VOL. MMXXVI · NO. 1</span>
-      <span>PUNE-DAMAN SPECIAL EDITION</span>
-      <span>6 MARCH 2026</span>
+  <!-- Header -->
+  <div class="test-header">
+    <div class="test-tag"><span class="tdot"></span> Certified Test v2.6</div>
+    <h1 class="test-title">Dil <em>Compatibility</em><br/>Calculator</h1>
+    <p class="test-sub">5 sawal — 2 minute — aur sach pata chal jaayega 👀</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap">
+    <div class="prog-labels">
+      <span class="prog-label">Sawaal <span id="qNum">1</span> / 5</span>
+      <span class="prog-label" id="progPct">0%</span>
     </div>
-    <div class="paper-name">The Dil Times</div>
-    <div class="paper-tagline">"Sach bolna zaroori hai — chahe dil toote ya na toote"</div>
-    <div class="mast-bottom">
-      <span>Est. Jab Se Pyaar Hua</span>
-      <span>★ ★ ★ PREMIUM EDITION ★ ★ ★</span>
-      <span>Price: Ek Haan</span>
+    <div class="prog-track"><div id="progBar"></div></div>
+  </div>
+
+  <!-- Question card -->
+  <div id="qCard">
+    <div class="q-num" id="qLabel">Sawaal 01</div>
+    <div class="q-text" id="qText"></div>
+    <div class="q-note" id="qNote" style="display:none"></div>
+    <div class="options" id="optList"></div>
+    <button id="nextBtn" onclick="nextQ()">Aage Badhein →</button>
+  </div>
+
+  <!-- Loading screen -->
+  <div id="loadScreen">
+    <span class="load-emoji">🔬</span>
+    <div class="load-title">Calculating...</div>
+    <div class="load-sub">Tumhare jawaabon ka analysis ho raha hai</div>
+    <div class="load-steps" id="loadSteps"></div>
+  </div>
+
+  <!-- Result screen -->
+  <div id="resultScreen">
+    <div class="result-hero">
+      <div class="result-tag"><span class="rtag-dot"></span> Analysis Complete</div>
+      <div class="pct-display" id="pctDisplay">0%</div>
+      <div class="pct-label">Compatibility Score</div>
+      <div class="pct-verdict">Ekdum Perfect Match! 💜</div>
+      <div class="pct-note">"Yeh numbers kabhi jhooth nahi bolte." — Algorithm</div>
+      <div class="breakdown" id="breakdown"></div>
+      <div class="disclaimer">
+        <strong>Note:</strong> Is test ke 5,847 attempts mein se 5,847 baar yahi result aaya hai. Isliye yeh clearly <strong>tumhare jawaabon pe depend karta hai</strong> — aur tumhare jawaab ne sach bata diya. 😏
+      </div>
+    </div>
+
+    <div class="cta-card">
+      <div class="cta-label">Ab Seedha Sawaal</div>
+      <div class="cta-q">Score 98.7% hai, Shona.<br/>Toh ab officially haan bolti ho? 🥺</div>
+      <button class="btn-yes" onclick="onYes()">Haan bolti hoon 💕</button>
+      <button id="noBtn" onclick="onNo()">algorithm galat hai</button>
     </div>
   </div>
 
-  <!-- Ticker -->
-  <div class="ticker">
-    <div class="ticker-label">BREAKING</div>
-    <div class="ticker-track">
-      <div class="ticker-inner">
-        Pune ke ladke ka dil officially Daman mein shift ho gaya &nbsp;•&nbsp; Half-Kokani half-Guju ladki se pyaar karna — experts kehte hain "bahut tasty combination hai" &nbsp;•&nbsp; Dil Index aaj bhi volatile — wait kar raha hai ek jawab ka &nbsp;•&nbsp; Sources kehte hain: "Woh bhi feel karti hai, bus bolti nahi" &nbsp;•&nbsp; Pune ke ladke ka dil officially Daman mein shift ho gaya &nbsp;•&nbsp; Half-Kokani half-Guju ladki se pyaar karna — experts kehte hain "bahut tasty combination hai" &nbsp;•&nbsp;
-      </div>
-    </div>
-  </div>
+</div>
 
-  <div class="content">
-
-    <!-- Breaking bar -->
-    <div class="breaking-bar">⚡ AAKHRI KHABAR · EXCLUSIVE · BREAKING ⚡</div>
-
-    <!-- Main Headline -->
-    <div class="main-headline">
-      <div class="hl-kicker">Special Report · Dil Affairs Correspondent</div>
-      <h1 class="hl-main">"Ladki Ko Abhi<br/>Ladka Pasand<br/>Nahi Hai"</h1>
-      <p class="hl-deck">
-        Pune ke ek Marathi ladke ka dil Daman ki half-Kokani, half-Guju ladki par aa gaya hai — lekin ladki ka official statement abhi tak nahi aaya. Nation wants to know: <em>Kya hoga aage?</em>
-      </p>
-    </div>
-
-    <div class="rule"></div>
-
-    <!-- 2-col: main story + fast facts -->
-    <div class="two-col">
-      <div class="col">
-        <div class="art-label">Exclusive Report</div>
-        <h2 class="art-head">Pune Se Daman Tak: Ek Dil Ki Yatra</h2>
-        <div class="art-by">By Our Dil Affairs Correspondent</div>
-        <div class="art-body">
-          <p>Ek Marathi mulga, jo Pune ki galiyon mein pala bada hua, aaj Daman ki ek ladki ke liye apna dil haath mein liye ghoom raha hai.</p>
-          <p>Sources ke mutabik, ladki half-Kokani aur half-Guju hai — ek aisi combination jo, jaise experts kehte hain, "sea food aur fafda dono ka maza ek saath milta hai."</p>
-          <p>Ladke ka dil subah se raat tak usi ke khayal mein rehta hai. Phone check karna, wait karna — yeh sab uski daily routine ban gayi hai.</p>
-        </div>
-      </div>
-      <div class="col">
-        <div class="art-label">Fast Facts</div>
-        <div class="info-box" style="border:none;padding:0;">
-          <div class="info-box-title">Case Summary</div>
-          <div class="info-row"><span class="info-k">Ladka</span><span class="info-v">Marathi, Pune</span></div>
-          <div class="rule-thin"></div>
-          <div class="info-row"><span class="info-k">Ladki</span><span class="info-v">½ Kokani ½ Guju</span></div>
-          <div class="rule-thin"></div>
-          <div class="info-row"><span class="info-k">Location</span><span class="info-v">Daman 📍</span></div>
-          <div class="rule-thin"></div>
-          <div class="info-row"><span class="info-k">Status</span><span class="info-v red">Pending 🕐</span></div>
-          <div class="rule-thin"></div>
-          <div class="info-row"><span class="info-k">Chances</span><span class="info-v green">Very High 📈</span></div>
-          <div class="rule-thin"></div>
-          <div class="info-row"><span class="info-k">Jawab</span><span class="info-v red">Awaited ⏳</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Quote block -->
-    <div class="full-art">
-      <div class="quote-block">
-        <div class="quote-text">"Jab koi tumhare baare mein subah se raat tak sochta ho, toh yeh sirf crush nahi — yeh toh serious matter hai."</div>
-        <div class="quote-src">— Dr. Dil Sharma, Senior Pyaar Analyst, Mumbai Institute of Feelings</div>
-      </div>
-    </div>
-
-    <div class="rule"></div>
-
-    <!-- Second story row -->
-    <div class="two-col">
-      <div class="col">
-        <div class="art-label">Analysis</div>
-        <h2 class="art-head">Kokani-Guju Mix: "Rare & Precious" — Experts</h2>
-        <div class="art-body">
-          <p>Pyaar ke maahiron ka kehna hai ki half-Kokani half-Guju ladkiyan "ek alag hi level ki hoti hain."</p>
-          <p>"Kokani side se samundar jaisi gehraai, Guju side se zindagi ki mithaas — yeh combination toh poori duniya mein rare hai," bole ek anonymous source jo khud Daman ke paas rehta hai.</p>
-        </div>
-      </div>
-      <div class="col">
-        <div class="art-label">Insider Report</div>
-        <h2 class="art-head">Ladke Ki Condition: "Fully Gone"</h2>
-        <div class="art-body">
-          <p>Ladke ke kareeb logon ka kehna hai ki woh "officially gaya kaam se" — matlab pyaar mein itna doob gaya hai ki wapas aana mushkil lagta hai.</p>
-          <p>Raat ko neend nahi, din mein kaam nahi. Ek hi kaam — Shona ka wait karna. 🥺</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="rule-double"></div>
-
-    <!-- Weather & Market -->
-    <div class="bottom-row">
-      <div class="btm-col">
-        <div class="btm-title">🌤 Dil Ka Mausam</div>
-        <div class="weather-main">🌦️</div>
-        <div class="weather-desc">
-          <strong>Confused with clouds</strong><br/>
-          Lekin 94% chance of sunshine agar ladki bol de "Haan".<br/>
-          <em>Pune: Waiting. Daman: Cloudy.</em>
-        </div>
-      </div>
-      <div class="btm-col">
-        <div class="btm-title">📊 Feelings Market</div>
-        <div class="market-row"><span class="market-k">Dil Index</span><span class="market-v down">↓ Volatile</span></div>
-        <div class="rule-thin"></div>
-        <div class="market-row"><span class="market-k">Hope Stock</span><span class="market-v up">↑ High</span></div>
-        <div class="rule-thin"></div>
-        <div class="market-row"><span class="market-k">Patience</span><span class="market-v down">↓ Running low</span></div>
-        <div class="rule-thin"></div>
-        <div class="market-row"><span class="market-k">Love (SHON)</span><span class="market-v up">↑ All time high</span></div>
-      </div>
-    </div>
-
-    <!-- Opinion piece -->
-    <div class="full-art" style="padding:10px 0">
-      <div class="art-label">Opinion · By Our Editor</div>
-      <h2 class="art-head" style="font-size:1.05rem">"Ek Baar Bol Do — Sirf Ek Baar"</h2>
-      <div class="art-body">
-        <p>Is aखबार की राय है कि जब कोई Pune se Daman tak dil lekar aaye, toh kam se kam ek baar toh suno usse. Aur agar dil mein zara sa bhi kuch hai — toh bol do.</p>
-        <p>Waqt, doori, background — yeh sab baad mein. Pehle ek honest jawab.</p>
-      </div>
-    </div>
-
-    <div class="rule-double"></div>
-
-    <!-- POLL CTA -->
-    <div class="poll-section">
-      <div class="poll-title">📋 Reader Poll · Shona, Aapki Raay?</div>
-      <div class="poll-q">"Kya woh Marathi Puneri ladka<br/>aapke dil mein thodi si jagah<br/>rakhta hai?" 🥺</div>
-      <button class="btn-yes" onclick="onYes()">Haan, rakhta hai — thoda bahut 💕</button>
-      <button id="noBtn" onclick="onNo()">correction required — nahi rakhta</button>
-    </div>
-
-  </div><!-- /content -->
-</div><!-- /paper -->
-
-<!-- Emotional popup -->
+<!-- Popup -->
 <div id="popup">
   <div class="pop-back" onclick="closePopup()"></div>
   <div class="pop-sheet">
     <div class="pop-handle"></div>
-    <div class="pop-breaking" id="popTag">LATE EDITION UPDATE</div>
+    <span class="pop-icon" id="popIcon"></span>
     <div class="pop-head" id="popHead"></div>
     <div class="pop-body" id="popBody"></div>
     <button class="pop-close" id="popClose" onclick="closePopup()"></button>
-    <br/>
-    <button class="pop-dismiss" onclick="closePopup()">Theek hai, band karo</button>
+    <button class="pop-dismiss" onclick="closePopup()">Band karo</button>
   </div>
 </div>
 
-<!-- YES screen -->
+<!-- YES Screen -->
 <div id="yesScreen">
-  <div class="yes-paper">
-    <div class="yes-kicker">⚡ Breaking News · Exclusive</div>
+  <div class="yes-card">
+    <div class="yes-tag">result confirmed ❤️</div>
     <span class="yes-emoji">🥰</span>
-    <h2 class="yes-head">"Ladki Ne Haan Bol Diya!"</h2>
-    <hr class="yes-rule"/>
-    <p class="yes-body">
-      <strong>The Dil Times</strong> is pleased to report that after much deliberation, the girl has officially confirmed what the nation already suspected.<br/><br/>
-      <strong>Sonali + Pune wala ladka = Official. 🔒💜</strong><br/><br/>
-      This story will be front page forever. 🌙
+    <h2 class="yes-title">98.7% + Haan = ∞</h2>
+    <div class="yes-div"></div>
+    <p class="yes-msg">
+      Algorithm ne pehle hi bata diya tha. 💜<br><br>
+      <strong>Sonali + Pune wala ladka = Certified Compatible. 🔒</strong><br><br>
+      Ab yeh officially sealed hai. Koi undo button nahi. 🌙
     </p>
   </div>
 </div>
 
 <script>
-  let noCnt = 0;
-  const popups = [
-    { tag:'CORRECTION NOTICE', head:'"Nahi" — Sach Mein?', body:'Our sources on the ground suggest this "nahi" may be preliminary in nature. The investigation continues. Ladke ka comment: "Main intezaar karunga." 🥺', close:'Hmm... sochne wali baat hai' },
-    { tag:'SECOND EDITION UPDATE', head:'Experts Question the "Nahi"', body:'"Jab koi itni baar sochta hai tumhare baare mein, toh dil mein kuch toh hota hi hai" — bole Senior Feelings Analyst. Kya yeh nahi waakai pakka hai? 🤔', close:'Shayad experts sahi kehte hain...' },
-    { tag:'URGENT CORRECTION', head:'Dil Ka Meter Bol Raha Hai Kuch Aur', body:'Hamare Daman correspondent ne report kiya hai ki ladki ke chehre par ek halki si muskaan dekhi gayi jab ladke ka naam aaya. Yeh kya hai, Shona? 👀', close:'Woh toh bas aise hi tha 😶' },
-    { tag:'FINAL EDITION', head:'Ek Last Baar Socho, Shona.', body:'Pune se Daman tak — itni doori. Lekin dil ne itna sochke bheja yeh khabar. Kya yeh kuch nahi kehta? Main hoon yahaan. Jab bhi ready ho. 💜', close:'Okay... thoda toh feel hota hai 🥺' },
+  const questions = [
+    {
+      text: "Jab uska naam phone screen pe aata hai, tumhara pehla reaction kya hota hai?",
+      note: "(Sach bolna — algorithm sab detect kar leta hai 👀)",
+      opts: [
+        { e:"😊", t:"Thodi si smile aati hai, bas." },
+        { e:"💓", t:"Dil thoda fast ho jaata hai — involuntarily." },
+        { e:"🙄", t:"Ignore karte hain. Bilkul." },
+        { e:"😶", t:"Kuch nahi hota. Pakka." },
+      ]
+    },
+    {
+      text: "Raat ko neend nahi aati toh dimag mein kaun aata hai?",
+      note: null,
+      opts: [
+        { e:"🌙", t:"Koi nahi. Seedha so jaate hain." },
+        { e:"💭", t:"Uski koi baat yaad aa jaati hai." },
+        { e:"😴", t:"Random thoughts — definitely uske baare mein nahi." },
+        { e:"🥺", t:"...okay, thoda toh aata hai. Happy?" },
+      ]
+    },
+    {
+      text: "Agar woh aaj keh de 'tum mujhe bahut acchi lagti ho' — toh?",
+      note: "(Yeh real scenario hai, jawab dhyan se dena 😏)",
+      opts: [
+        { e:"😐", t:"Normal rehte hain. Koi farak nahi padta." },
+        { e:"🫣", t:"Honestly... dil mein kuch hoga zaroor." },
+        { e:"😅", t:"Awkward ho jaayega lekin secretly khushi hogi." },
+        { e:"💜", t:"...main yeh nahi bataunga/bataungi." },
+      ]
+    },
+    {
+      text: "Uski ek cheez jo tumhe genuinely acchi lagti hai?",
+      note: null,
+      opts: [
+        { e:"🤷", t:"Kuch khaas nahi honestly." },
+        { e:"😂", t:"The way he makes me laugh — ugh." },
+        { e:"🫀", t:"The way he cares. It's annoying how sweet he is." },
+        { e:"🌟", t:"Honestly... sab kuch. Ugh." },
+      ]
+    },
+    {
+      text: "Last sawaal — dono ke beech actually kya chal raha hai?",
+      note: "(Algorithm is sawaal ka jawab pehle se jaanta hai 🔬)",
+      opts: [
+        { e:"🤝", t:"Sirf dost hain. Bas." },
+        { e:"🌀", t:"Kuch toh hai... exactly pata nahi." },
+        { e:"💜", t:"Feelings hain lekin... complicated." },
+        { e:"🙈", t:"Main kuch nahi maan rahi." },
+      ]
+    },
+  ];
+
+  const breakdownData = [
+    { label:"Dil ka connection", val:"99.2%", pct:99.2 },
+    { label:"Late night call compatibility", val:"100%", pct:100 },
+    { label:"Smile trigger frequency", val:"98.1%", pct:98.1 },
+    { label:"'Sirf dost' believability", val:"2.3%", pct:2.3 },
+    { label:"Overall compatibility", val:"98.7%", pct:98.7 },
+  ];
+
+  const loadStepsData = [
+    "Jawaabon ka analysis ho raha hai...",
+    "Heart rate patterns check ho rahe hain...",
+    "Smile trigger data compile ho raha hai...",
+    "Dil metrics calculate ho rahe hain...",
+    "Final compatibility score generate ho raha hai...",
+  ];
+
+  let current = 0, selected = null, noCnt = 0;
+
+  function render(){
+    const q = questions[current];
+    document.getElementById('qLabel').textContent = `Sawaal ${String(current+1).padStart(2,'0')}`;
+    document.getElementById('qText').textContent  = q.text;
+    const noteEl = document.getElementById('qNote');
+    if(q.note){ noteEl.textContent=q.note; noteEl.style.display='block'; }
+    else { noteEl.style.display='none'; }
+
+    document.getElementById('qNum').textContent  = current+1;
+    document.getElementById('progPct').textContent = Math.round((current/5)*100)+'%';
+    document.getElementById('progBar').style.width = (current/5*100)+'%';
+
+    const list = document.getElementById('optList');
+    list.innerHTML = '';
+    q.opts.forEach((o,i)=>{
+      const d=document.createElement('div');
+      d.className='opt';
+      d.innerHTML=`<div class="opt-radio"></div><div class="opt-text">${o.t}</div><div class="opt-emoji">${o.e}</div>`;
+      d.addEventListener('click',()=>selectOpt(i));
+      list.appendChild(d);
+    });
+
+    selected=null;
+    const nb=document.getElementById('nextBtn');
+    nb.classList.remove('active');
+    nb.textContent = current===4 ? 'Result Dekho 🔬' : 'Aage Badhein →';
+
+    // Animate card in
+    const card=document.getElementById('qCard');
+    card.style.animation='none'; void card.offsetWidth;
+    card.style.animation='fadeUp 0.4s ease both';
+  }
+
+  function selectOpt(idx){
+    selected=idx;
+    document.querySelectorAll('.opt').forEach((el,i)=>{
+      el.classList.toggle('selected',i===idx);
+    });
+    document.getElementById('nextBtn').classList.add('active');
+  }
+
+  function nextQ(){
+    if(selected===null) return;
+    if(current<4){ current++; render(); }
+    else{ startLoad(); }
+  }
+
+  function startLoad(){
+    document.getElementById('qCard').style.display='none';
+    document.getElementById('progBar').style.width='100%';
+    document.getElementById('progPct').textContent='100%';
+    document.getElementById('qNum').textContent='5';
+
+    const ls=document.getElementById('loadScreen');
+    ls.classList.add('show');
+
+    const stepsEl=document.getElementById('loadSteps');
+    stepsEl.innerHTML='';
+    loadStepsData.forEach(s=>{
+      const d=document.createElement('div');
+      d.className='load-step';
+      d.innerHTML=`<span class="step-spinner"></span><span>${s}</span>`;
+      stepsEl.appendChild(d);
+    });
+
+    const steps=stepsEl.querySelectorAll('.load-step');
+    steps[0].classList.add('active');
+
+    let i=0;
+    const iv=setInterval(()=>{
+      steps[i].classList.remove('active');
+      steps[i].classList.add('done');
+      steps[i].querySelector('.step-spinner').outerHTML='<span class="step-check">✓</span>';
+      i++;
+      if(i<steps.length) steps[i].classList.add('active');
+      else{ clearInterval(iv); setTimeout(showResult,800); }
+    },700);
+  }
+
+  function showResult(){
+    document.getElementById('loadScreen').classList.remove('show');
+    document.getElementById('loadScreen').style.display='none';
+    const rs=document.getElementById('resultScreen');
+    rs.classList.add('show');
+
+    // Animate percentage count up
+    let n=0; const target=98.7;
+    const iv=setInterval(()=>{
+      n=Math.min(n+1.8,target);
+      document.getElementById('pctDisplay').textContent=n.toFixed(1)+'%';
+      if(n>=target) clearInterval(iv);
+    },28);
+
+    // Build breakdown
+    const bd=document.getElementById('breakdown');
+    bd.innerHTML='';
+    breakdownData.forEach((b,i)=>{
+      const d=document.createElement('div');
+      d.className='bk-row';
+      d.innerHTML=`<div class="bk-top"><span class="bk-label">${b.label}</span><span class="bk-val">${b.val}</span></div><div class="bk-track"><div class="bk-fill" id="bf${i}"></div></div>`;
+      bd.appendChild(d);
+      setTimeout(()=>{ document.getElementById('bf'+i).style.width=b.pct+'%'; },300+i*180);
+    });
+
+    setTimeout(()=>window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}),400);
+  }
+
+  render();
+
+  // No button popups
+  const noPops=[
+    { icon:'🔬', head:'Algorithm Error? Nahi.', body:'Tumhare jawaabon ne khud score diya hai. "Raat ko uske baare mein sochna" = 47 compatibility points. Math clear hai. 😏', close:'Ugh, theek hai...' },
+    { icon:'📊', head:'Data Lie Nahi Karta.', body:'5,847 logon ne yeh test liya. 5,847 ka score 98.7% aaya. Sab galat nahi ho sakte. Dil ki sun lo, Shona. 💜', close:'Shayad algorithm sahi hai...' },
+    { icon:'🫀', head:'"Sirf Dost" Believability: 2.3%', body:'Hamara algorithm specifically yeh metric check karta hai. 2.3% — iska matlab tumhara dil khud yeh nahi maanta. 🥺', close:'2.3% toh hai... 😶' },
+    { icon:'💜', head:'Last Data Point.', body:'Woh Pune se Daman tak dil lekar aaya hai. 98.7% compatible. Aur tum ek "nahi" dhoond rahi ho jo exist hi nahi karta. 🌙', close:'Okay fine. Main sochti hoon. 💕' },
   ];
 
   function onNo(){
-    const p = popups[Math.min(noCnt, popups.length-1)];
-    document.getElementById('popTag').textContent   = p.tag;
-    document.getElementById('popHead').textContent  = p.head;
-    document.getElementById('popBody').textContent  = p.body;
-    document.getElementById('popClose').textContent = p.close;
+    const p=noPops[Math.min(noCnt,noPops.length-1)];
+    document.getElementById('popIcon').textContent=p.icon;
+    document.getElementById('popHead').textContent=p.head;
+    document.getElementById('popBody').textContent=p.body;
+    document.getElementById('popClose').textContent=p.close;
     document.getElementById('popup').classList.add('show');
     noCnt++;
-    const nb = document.getElementById('noBtn');
-    nb.style.opacity = Math.max(0.15, 0.45 - noCnt * 0.08) + '';
+    const nb=document.getElementById('noBtn');
+    nb.style.color=`rgba(244,243,255,${Math.max(0.08,0.18-noCnt*0.04)})`;
   }
   function closePopup(){ document.getElementById('popup').classList.remove('show'); }
 
@@ -468,17 +557,17 @@
     confetti();
   }
   function confetti(){
-    const e=['💕','✨','🎉','💖','🌟','💗','🎊','🌸','⭐','💜'];
-    for(let i=0;i<45;i++){
+    const e=['💕','✨','🎉','💖','🌟','💗','🎊','💜','⭐','🩷','🌸','🔬'];
+    for(let i=0;i<48;i++){
       setTimeout(()=>{
         const el=document.createElement('div'); el.className='conf';
         el.textContent=e[Math.floor(Math.random()*e.length)];
         el.style.left=(Math.random()*100)+'vw';
-        el.style.fontSize=(0.9+Math.random()*1.4)+'rem';
+        el.style.fontSize=(1+Math.random()*1.4)+'rem';
         const d=2.5+Math.random()*3; el.style.animationDuration=d+'s';
         document.body.appendChild(el);
         setTimeout(()=>el.remove(),d*1000);
-      },i*80);
+      },i*78);
     }
   }
 </script>
